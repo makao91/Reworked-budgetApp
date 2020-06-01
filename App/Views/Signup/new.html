@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Sign up{% endblock %}
+{% block title %}Rejestracja{% endblock %}
 
 {% block footer %}
 
@@ -27,15 +27,42 @@
       },
       messages:{
         email: {
-          remote: 'Email already taken'
+          email: 'Wprowadź poprawny adres email. Przykład: moje@subaru.pl',
+          remote: 'Uzytkownik o tym adresie email już istnieje. Zaloguj się, lub wprowadź inny adres email.',
+          required: 'Email jest wymagany.'
+        },
+        password: {
+          required: 'Hasło jest wymagane.',
+          minlength: 'Musi zawierać conajmniej 6 znaków'
+        },
+        name: {
+          required: 'Imię jest wymagane.'
         }
       }
     });
 
     $('#inputPassword').hideShowPassword({
       show: false,
-      innerToggle: focus
-    })
+      innerToggle: focus,
+      toggle: {
+        element: '<button type="button" class="btn btn-light">',
+        verticalAlign: 'top'
+      },
+      states: {
+        shown: {
+          toggle: {
+            className: 'hideShowPassword-toggle-hide',
+            content: 'Ukryj',
+          }
+        },
+        hidden: {
+          toggle: {
+            className: 'hideShowPassword-toggle-show',
+            content: 'Pokaż',
+          }
+        }
+      }
+    });
   });
 
 </script>
@@ -44,32 +71,65 @@
 
 {% block body %}
 
-    <h1>Sign up</h1>
-    {% if user.errors is not empty %}
-      <p>Errors:</p>
-        <ul>
-          {% for error in user.errors %}
-            <li>{{error}}</li>
-          {% endfor %}
-        </ul>
-    {% endif %}
+<p class="menuM balanceTitle">Rejestracja</p>
 
-    <form method="post" action="/signup/create" id="formSignup">
-      <div class="form-group">
-        <label for="inputName">Name</label>
-        <input id="inputName" name="name" placeholder="Name" autofocus value="{{user.name}}" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="inputEmail">Email</label>
-        <input id="inputEmail" name="email" placeholder="Email adress" value="{{user.email}}" type="email" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="inputPassword">Password</label>
-        <input type="password" id="inputPassword" name="password" placeholder="Password" class="form-control">
-      </div>
+{% if user.errors is not empty %}
+<p>Errors:</p>
+  <ul>
+    {% for error in user.errors %}
+      <li>{{error}}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 
-
-      <button type="submit">Sign up</button>
+<div class="row">
+  <div class="col-6">
+      <form method="post" action="/signup/create" id="formSignup">
+      <div class="form-group my-2 text-right">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div><i class="icon-user mr-1" style="width: 10%;"></i></div>
+          </div>
+          <input style="width: 90%;" id="inputName" name="name" placeholder="Imię" autofocus value="{{user.name}}" class="form-control">
+          <label style="width: 100%;" for="inputName" class="error text-right" id="inputName-error"></label>
+        </div>
+      </div>
+      <div class="form-group mb-2 text-right">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div><i style="width: 10%;" class="icon-mail mr-1"></i></div>
+          </div>
+          <input style="width: 90%;" id="inputEmail" name="email" placeholder="Adres email" value="{{user.email}}" type="email" class="form-control"><br>
+          <label style="width: 100%;" for="inputEmail" class="error text-right" id="inputEmail-error"></label>
+        </div>
+      </div>
+      <div class="form-group mb-2 text-right">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div><i class="icon-lock mr-1"></i></div>
+          </div>
+          <input type="password" id="inputPassword" name="password" placeholder="Hasło" class="form-control">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Zarejestruj się</button>
     </form>
+  </div>
+  <div class="col-6">
+    <div class="row">
+      <div class="col-md-6 marginY">
+        <blockquote class="blockquote">
+          <p class="h4 pt-3">Najważniejszy w każdym działaniu jest początek.</p>
+          <footer class="blockquote-footer">Platon</footer>
+        </blockquote>
+      </div>
+      <div class="col-md-6">
+        <img src="../img/Plato-raphael.jpg" class="img-thumbnail" alt="platon">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
 {% endblock %}

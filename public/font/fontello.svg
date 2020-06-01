@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2020 by original authors @ fontello.com</metadata>
+<defs>
+<font id="fontello" horiz-adv-x="1000" >
+<font-face font-family="fontello" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="lock-circled" unicode="&#xe800;" d="M0 350q0 207 147 354t353 146 354-146 146-354-146-354-354-146-353 146-147 354z m252-271l496 0 0 314-82 0 0 59q0 33-14 66-19 45-62 74t-94 30-92-29-62-75q-16-35-14-125l-76 0 0-314z m176 314l0 59q2 31 19 49t45 21l4 0q29-2 49-22t21-48l0-59-138 0z" horiz-adv-x="1000" />
+
+<glyph glyph-name="user" unicode="&#xe802;" d="M897-41l-895 0s-4 11 0 71c51 27 292 92 306 98l1 45 19 5s7 70 7 81c0 0-28 56-35 89 0 0-23 0-26 24-4 25 0 41-6 60-4 17 10 36 21 32 0 0-25 129 0 164 18 25 71 89 198 111 0 0 31 4 41-1 7-3 6-5-9-21 0 0 65-40 86-104 13-40 8-126 0-149 0 0 19 4 17-20-4-39-5-110-33-96 0 0-1-80-25-96 0 0-7-63 4-65l16 0s6-52 19-65c0 0 267-69 294-99 1-33 0-64 0-64z" horiz-adv-x="897" />
+
+<glyph glyph-name="mail" unicode="&#xe803;" d="M0 28v644q0 8 2 18l460-460q39-39 95-39 55 0 94 39l460 460q2-9 2-18v-644q0-37-26-62t-62-26h-937q-36 0-62 26t-26 62z m63 728q13 4 25 4h937q12 0 25-4l-463-463q-13-12-31-12t-30 12z" horiz-adv-x="1113.3" />
+
+<glyph glyph-name="lock" unicode="&#xf512;" d="M0-30v393q0 15 10 25t24 10h46v148q0 54 20 104t56 87q36 39 85 60t104 21q54 0 103-21t85-60q36-38 56-87t20-104v-148h46q14 0 24-10t10-25v-393q0-7-3-12t-7-8-10-7-14-6q-19-8-53-18t-111-24-147-14q-151 0-310 56-16 6-25 13t-9 20z m206 428h277v148q0 63-42 107-40 42-96 43-58-1-98-43-41-44-41-107v-148z" horiz-adv-x="689" />
+</font>
+</defs>
+</svg>

@@ -14,10 +14,6 @@ use \App\Flash;
 class Login extends \Core\Controller
 {
 
-    public function newAction()
-    {
-      View::renderTemplate('Login/new.html');
-    }
 
     public function createAction()
     {
@@ -29,13 +25,11 @@ class Login extends \Core\Controller
 
         Auth::login($user, $remember_me);
 
-        Flash::addMessage('Login successful');
-
         $this->redirect(Auth::getReturnToPage());
 
       } else{
-        Flash::addMessage('Login unsuccessful, please try again.', Flash::WARNING);
-        View::renderTemplate('Login/new.html', [
+        Flash::addMessage('Nie udało się zalogować. Spróbuj jeszcze raz.', Flash::WARNING);
+        View::renderTemplate('Home/index.html', [
           'email' => $_POST['email'],
           'remember_me' => $remember_me]);
       }
