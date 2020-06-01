@@ -54,7 +54,7 @@ class Auth
 
   public static function getReturnToPage()
   {
-    return $_SESSION['return_to'] ?? '/';
+    return $_SESSION['return_to'] ?? '/menu/index';
   }
 
   public static function getUser()
@@ -96,10 +96,5 @@ protected static function forgetLogin()
     setcookie('remember_me', '', time() - 3600);
     }
 }
-
-
-
-
-
 
 }

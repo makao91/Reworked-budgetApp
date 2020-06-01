@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Reset password{% endblock %}
+{% block title %}Resetowanie hasła{% endblock %}
 
 {% block footer %}
 
@@ -8,9 +8,6 @@
 <script src="/js/app.js"></script>
 
 <script>
-
-
-
   $(document).ready(function(){
 
     $('#formPassword').validate({
@@ -21,20 +18,45 @@
           validPassword: true
         }
       },
+      messages:{
+        password: {
+          required: 'Hasło jest wymagane.',
+          minlength: 'Musi zawierać conajmniej 6 znaków'
+        }
+      }
     });
 
     $('#inputPassword').hideShowPassword({
       show: false,
-      innerToggle: focus
-    })
+      innerToggle: focus,
+      toggle: {
+        element: '<button type="button" class="btn btn-light">',
+        verticalAlign: 'top'
+      },
+      states: {
+        shown: {
+          toggle: {
+            className: 'hideShowPassword-toggle-hide',
+            content: 'Ukryj',
+          }
+        },
+        hidden: {
+          toggle: {
+            className: 'hideShowPassword-toggle-show',
+            content: 'Pokaż',
+          }
+        }
+      }
+    });
   });
+
 </script>
 
 {% endblock %}
 
 {% block body %}
 
-    <h1>Reset password</h1>
+    <p class="menuM balanceTitle">Resetowanie hasła</p>
     {% if user.errors is not empty %}
       <p>Errors:</p>
         <ul>
@@ -46,11 +68,11 @@
 
     <form method="post"  id="formPassword" action="/password/reset-password">
       <input type="hidden" name="token" value="{{token}}"/>
-      <div class="form-group">
-        <label for="inputPassword">Password</label>
-        <input type="password" id="inputPassword" name="password" placeholder="Password" class="form-control">
+      <div class="form-group text-left input-group-lg">
+        <h3><label for="inputPassword">Nowe hasło</label></h3>
+        <input style="height:40px;" type="password" id="inputPassword" name="password" placeholder="Hasło" class="form-control" >
       </div>
-      <button type="submit">Reset</button>
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Zmień</button>
     </form>
 
 {% endblock %}

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\User;
+use \App\Flash;
 
 
 /**
@@ -14,15 +15,10 @@ use \App\Models\User;
 class Password extends \Core\Controller
 {
 
-    public function forgotAction()
-     {
-      View::renderTemplate('Password/forgot.html');
-    }
-
     public function requestResetAction()
     {
-      User::sendPasswordReset($_POST['email']);
-      View::renderTemplate('password/reset_request.html');
+      User::sendPasswordReset($_POST['emailReset']);         
+
     }
 
     public function resetAction()

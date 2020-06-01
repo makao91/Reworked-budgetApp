@@ -24,6 +24,8 @@ class User extends \Core\Model
     };
   }
 
+
+
   public function save()
   {
     $this->validation();
@@ -50,38 +52,40 @@ class User extends \Core\Model
         return $stmt->execute();
     }
     return false;
-
   }
+
+
 
 
   public function validation()
   {
     if($this->name == ''){
-      $this->errors[] = 'Name is required';
+      $this->errors[] = 'Imię jest wymagane.';
     }
 
     if(filter_var($this->email, FILTER_VALIDATE_EMAIL) === false){
-      $this->errors[] = 'Invalid email';
+      $this->errors[] = 'Nipoprawny format email.';
     }
     if(static::emailExists($this->email, $this->id ?? null)){
-      $this->errors[] = 'Email already taken';
+      $this->errors[] = 'Wskazany email już istnieje w bazie. Zaloguj się, lub wprowadź inny.';
     }
     if(isset($this->password))
     {
         if(strlen($this->password) < 6){
-          $this->errors[] = 'Please enter at least 6 characters for the password';
+          $this->errors[] = 'Wprowadź conajmniej 6 znaków do hasła';
         }
 
         if(preg_match('/.*[a-z]+.*/i', $this->password) == 0){
-          $this->errors[] = 'Password needs at least one letter';
+          $this->errors[] = 'Hasło wymaga conajmniej jednej litery.';
         }
 
         if(preg_match('/.*\d+.*/', $this->password) == 0){
-          $this->errors[] = 'Password needs at least one number';
+          $this->errors[] = 'Hasło wymaga conajmniej jednej cyfry.';
         }
     }
-
   }
+
+
 
   public static function emailExists($email, $ignore_id = null)
   {
@@ -93,6 +97,8 @@ class User extends \Core\Model
       }
       return false;
   }
+
+
 
   public static function findByEmail($email)
   {
@@ -109,6 +115,8 @@ class User extends \Core\Model
     return $stmt->fetch();
   }
 
+
+
   public static function authenticate($email, $password)
   {
     $user = static::findByEmail($email);
@@ -121,6 +129,8 @@ class User extends \Core\Model
       return false;
     }
   }
+
+
 
   public static function findById($id)
   {
@@ -136,6 +146,9 @@ class User extends \Core\Model
 
     return $stmt->fetch();
   }
+
+
+
   public function rememberLogin()
   {
     $token = new Token();
@@ -169,6 +182,8 @@ class User extends \Core\Model
     }
   }
 
+
+
   protected function startPasswordReset()
   {
     $token = new Token();
@@ -190,14 +205,17 @@ class User extends \Core\Model
     return $stmt->execute();
   }
 
+
+
   protected function sendPasswordResetEmail()
   {
     $url = 'http://'.$_SERVER['HTTP_HOST'].'/password/reset/'.$this->password_reset_token;
     $text = View::getTemplate('Password/reset_email.txt', ['url'=>$url]);
     $html = View::getTemplate('Password/reset_email.html', ['url'=>$url]);
 
-    Mail::send($this->email, 'Password reset', $text, $html);
+    Mail::send($this->email, 'Reset hasła', $text, $html);
   }
+
 
 
   public static function findByPasswordReset($token)
@@ -227,6 +245,8 @@ class User extends \Core\Model
     }
   }
 
+
+
   public function resetPassword($password)
   {
     $this->password = $password;
@@ -255,6 +275,8 @@ class User extends \Core\Model
 
   }
 
+
+
   public function sendActivationEmail()
   {
     $url = 'http://'.$_SERVER['HTTP_HOST'].'/signup/activate/'.$this->activation_token;
@@ -282,6 +304,8 @@ class User extends \Core\Model
     $stmt->execute();
 
   }
+
+
 
   public function updateProfile($data)
   {

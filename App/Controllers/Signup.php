@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\User;
-
+use \App\Flash;
 
 class Signup extends \Core\Controller
 {
@@ -14,9 +14,11 @@ class Signup extends \Core\Controller
      *
      * @return void
      */
+
+
     public function newAction()
     {
-        View::renderTemplate('Signup/new.html');
+      View::renderTemplate('Signup/new.html');
     }
 
     public function createAction()
@@ -35,7 +37,8 @@ class Signup extends \Core\Controller
 
     public function successAction()
     {
-        View::renderTemplate('Signup/success.html');
+        Flash::addMessage('Rejestracja wykonana pomyślnie. Sprawdź swoję pocztę w celu aktywacji konta, by móc sie zalogować', Flash::WARNING);
+        View::renderTemplate('Home/index.html');
     }
 
     public function activateAction()
@@ -46,6 +49,8 @@ class Signup extends \Core\Controller
 
     public function activatedAction()
     {
-      View::renderTemplate('Signup/activated.html');
+      Flash::addMessage('Rejestracja zakończona sukcesem. Można się zalogować.', Flash::SUCCESS);
+      View::renderTemplate('Home/index.html');
+
     }
 }

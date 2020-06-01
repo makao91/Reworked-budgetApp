@@ -16,6 +16,4 @@ abstract class Authenticated extends \Core\Controller
   {
     $this->requireLogin();
   }
-
-
 }
