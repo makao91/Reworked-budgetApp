@@ -178,6 +178,7 @@ class User extends \Core\Model
         if($user->startPasswordReset())
         {
           $user->sendPasswordResetEmail();
+          echo 5; //returning value to ajax in home/index
         }
     }
   }
@@ -218,11 +219,31 @@ class User extends \Core\Model
 
 
 
+/*
+  public static function findByActivationToken($token)
+  {
+
+    $sql = 'SELECT * FROM users WHERE activation_hash = :token_hash';
+
+    $db = static::getDB();
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':token_hash', $token, PDO::PARAM_STR);
+
+    $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+    $stmt->execute();
+
+    return $user = $stmt->fetch();
+  }
+*/
+
+
+
   public static function findByPasswordReset($token)
   {
     $token = new Token($token);
     $hashed_token = $token->getHash();
-
 
     $sql = 'SELECT * FROM users WHERE password_reset_hash = :token_hash';
 
@@ -270,9 +291,7 @@ class User extends \Core\Model
 
       return $stmt->execute();
     }
-
       return false;
-
   }
 
 
@@ -286,10 +305,14 @@ class User extends \Core\Model
     Mail::send($this->email, 'Account activation', $text, $html);
   }
 
+
+
   public static function activate($value)
   {
     $token = new Token($value);
     $hashed_token = $token->getHash();
+
+
 
     $sql = 'UPDATE users
             SET is_active = 1,
@@ -302,11 +325,89 @@ class User extends \Core\Model
     $stmt->bindValue(':activation_hash', $hashed_token, PDO::PARAM_STR);
 
     $stmt->execute();
-
   }
 
+public function addDefaultCategoriesIncomes()
+{
+  $user = static::findByEmail($this->email);
+  $result = static::getDefaultCategoriesIncomes();
+  foreach ($result as $row) {
+    $categoryName = $row['name'];
+    $sql = 'INSERT INTO incomes_category_assigned_to_users (user_id, name) VALUES (:user_id, :categoryName)';
+
+    static::executeDefaultCategories($sql, $categoryName, $user->id);
+  };
+}
+
+public function addDefaultCategoriesExpenses()
+{
+  $user = static::findByEmail($this->email);
+  $result = static::getDefaultCategoriesExpenses();
+  foreach ($result as $row) {
+    $categoryName = $row['name'];
+    $sql = 'INSERT INTO expenses_category_assigned_to_users (user_id, name) VALUES (:user_id, :categoryName)';
+
+    static::executeDefaultCategories($sql, $categoryName, $user->id);
+  };
+}
+public function addDefaultPaymentMethods()
+{
+  $user = static::findByEmail($this->email);
+  $result = static::getDefaultPaymentMethods();
+  foreach ($result as $row) {
+    $categoryName = $row['name'];
+    $sql = 'INSERT INTO payment_methods_assigned_to_users (user_id, name) VALUES (:user_id, :categoryName)';
+
+    static::executeDefaultCategories($sql, $categoryName, $user->id);
+  };
+}
+
+static public function executeDefaultCategories($sql, $category, $id)
+{
+  $db = static::getDB();
+  $stmt = $db->prepare($sql);
+
+  $stmt->bindValue(':user_id', $id, PDO::PARAM_INT);
+  $stmt->bindValue(':categoryName', $category, PDO::PARAM_STR);
+
+  $stmt->execute();
+}
 
 
+static public function getDefaultCategoriesIncomes()
+{
+  $sql = 'SELECT name FROM incomes_category_default';
+  $db = static::getDB();
+  $stmt = $db->prepare($sql);
+
+  $stmt->execute();
+
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+static public function getDefaultCategoriesExpenses()
+{
+  $sql = 'SELECT name FROM expenses_category_default';
+  $db = static::getDB();
+  $stmt = $db->prepare($sql);
+
+  $stmt->execute();
+
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+static public function getDefaultPaymentMethods()
+{
+  $sql = 'SELECT name FROM payment_methods_default';
+  $db = static::getDB();
+  $stmt = $db->prepare($sql);
+
+  $stmt->execute();
+
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/*
   public function updateProfile($data)
   {
     $this->name = $data['name'];
@@ -346,5 +447,5 @@ class User extends \Core\Model
     }
     return false;
   }
-
+*/
 }

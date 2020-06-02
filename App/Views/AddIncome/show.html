@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Dodaj przychód{% endblock %}
+
+{% block footer %}
+
+<script src="/js/jsDate.js"></script>
+
+{% endblock %}
+
+{% block body %}
+
+<main>
+  <header>
+    <h1 class="menuM balanceTitle text-center marginY py-2">Dodawanie przychodu</h1>
+  </header>
+  <div class="row mt-1">
+    <div class="col-lg-4 marginY">
+      <img class="mt-2" src="../img/income.jpg" alt="balans1" style="width:100%;">
+    </div>
+    <div class="col-lg-4 text-center mt-2">
+          <form id="formIncome" method="post" action="/addincome/create">
+            <div class="form-group">
+              <input type="number" step="0.01" placeholder="kwota" class="form-control" id="incomeAmount" name="incomeAmount"/>
+            </div>
+            <div class="row marginX form-group">
+              <div class="col-3 px-0">
+                <button type="button" onclick='currentDateYMD("incomeDate")' class="btn btn-info">Dzisiaj?</button>
+              </div>
+              <div class="col-6 px-0">
+                <div class="form-group">
+                  <input type="date" id="incomeDate" name="incomeDate"/>
+                </div>
+              </div>
+              <div class="col-3 px-0">
+                <button type="button" onclick='previousDateYMD("incomeDate")' class="btn btn-info">Wczoraj?</button>
+              </div>
+            </div>
+            <div class="form-group text-center">
+                  <label class="input-group-text d-block" for="incomeCategory">Kategoria</label>
+                  <select class="custom-select-md text-center" style="width: 100%"  id="incomeCategory" name="incomeCategory">
+                    <option value="1">-- Wybierz --</option>
+                  </select>
+            </div>
+            <div class="form-group">
+              <textarea  class="form-control" placeholder="Komentarz (opcjonalny)" id="incomeComment" name="incomeComment" aria-label="With textarea"></textarea>
+            </div>
+            <button type="submit" name="addIncomeBtn" id="addIncomeBtn" class="btn btn-success btn-block">Dodaj</button>
+          </form>
+        </div>
+    <div class="col-lg-4 marginY">
+      <img class="mt-2" src="../img/income.jpg" alt="balans2" style="width:100%;">
+    </div>
+  </div>
+</main>
+
+{% endblock %}

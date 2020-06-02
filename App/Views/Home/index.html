@@ -14,9 +14,16 @@
                url: "/Password/requestReset",
                method: "POST",
                data: {emailReset:emailReset},
-               success: function() {
-                   alert("Link resetujący hasło został wysłany na twoją skrzynkę.");
-                    $('#resetPassword').modal('hide');                                 
+               success: function(data) {
+                 alert(data);
+                 if(data == 5){
+                    alert("Link resetujący hasło został wysłany na twoją skrzynkę.");
+                    $('#resetPassword').modal('hide');
+                 }
+                 else {
+                   alert("Konto o takim adresie nie istnieje.");
+                 }
+
                }
           });
     });
@@ -81,6 +88,10 @@
   <div class="col-lg-4">
     <p class="h4">Okiełznaj swój portfel już dziś!</p>
 
+    {% if current_user %}
+      <h2>Cześć {{current_user.name}}.</h2>        
+        <a href="/menu/index"><button type="button" class="btn btn-warning btn-shadow btn-block">Przejdz do Menu</button></a>
+    {% else %}
     <form id="formLogin" method="post" action="/login/create">
       <div class="form-row mb-1">
         <div class="input-group">
@@ -120,7 +131,7 @@
 <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
-      <h5 class="modal-title">Resetowanie hasła</h5>
+      <h3 class="modal-title">Resetowanie hasła</h3>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -139,6 +150,9 @@
     </div>
   </div>
 </div>
+    {% endif %}
+
+
 
 
 </main>
