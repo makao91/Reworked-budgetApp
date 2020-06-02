@@ -245,3 +245,6 @@ width: 300px;
 	color: black;
 	cursor: pointer;
 }
+textarea {
+  resize: none;
+}

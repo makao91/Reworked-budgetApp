@@ -4,8 +4,6 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\User;
-use \App\Flash;
-
 
 /**
  * Home controller
@@ -17,9 +15,8 @@ class Password extends \Core\Controller
 
     public function requestResetAction()
     {
-      User::sendPasswordReset($_POST['emailReset']);         
-
-    }
+      User::sendPasswordReset($_POST['emailReset']);
+      }
 
     public function resetAction()
     {
