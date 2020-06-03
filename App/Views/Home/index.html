@@ -40,7 +40,7 @@
 <audio autoplay loop>
 <source src="sound/music.mp3" type="audio/mpeg">
 </audio>
-<main>
+<main class="fontColor">
 <header>
   <div class="containerLogo">
     <h1 class="elegantShadow">Reign of money</h1>
@@ -89,7 +89,7 @@
     <p class="h4">Okiełznaj swój portfel już dziś!</p>
 
     {% if current_user %}
-      <h2>Cześć {{current_user.name}}.</h2>        
+      <h2>Cześć {{current_user.name}}.</h2>
         <a href="/menu/index"><button type="button" class="btn btn-warning btn-shadow btn-block">Przejdz do Menu</button></a>
     {% else %}
     <form id="formLogin" method="post" action="/login/create">
@@ -151,9 +151,6 @@
   </div>
 </div>
     {% endif %}
-
-
-
 
 </main>
 {% endblock %}

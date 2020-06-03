@@ -5,7 +5,7 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Auth;
 use \App\Flash;
-use \App\Models\Income;
+use \App\Models\Expense;
 
 
 /**
@@ -13,41 +13,46 @@ use \App\Models\Income;
  *
  * PHP version 7.0
  */
-class AddIncome extends \Core\Controller
+class AddExpense extends Authenticated
 {
 
   protected function before()
   {
     parent::before();
-    $user = Auth::getUser();
-
+    $this->user = Auth::getUser();
   }
 
     public function showAction()
      {
-      View::renderTemplate('AddIncome/show.html');
+      View::renderTemplate('AddExpense/show.html');
     }
 
-  public function selectAction()
+  public function selectExpenseAction()
   {
     $searchTerm = $_POST['searchTerm'] ?? '';
-    Income::selectPlugin($searchTerm);
+    Expense::selectExpensePlugin($searchTerm);
+  }
+  public function selectPaymentMethodAction()
+  {
+    $searchTerm = $_POST['searchTerm'] ?? '';
+    Expense::selectPaymentMethodPlugin($searchTerm);
   }
 
 
   public function createAction()
   {
-    $income = new Income($_POST);
+    $expense = new Expense($_POST);
 
-    if($income->save())
+    if($expense->save())
     {
-      Flash::addMessage('Przychód dodano pomyślnie');
+      Flash::addMessage('Wydatek dodano pomyślnie');
       $this->showAction();
     }
     else{
-      View::renderTemplate('AddIncome/show.html', ['income' =>$income]);
+      View::renderTemplate('AddExpense/show.html', ['expense' =>$expense]);
     }
   }
+}
 
   /*  public function editAction()
     {
@@ -71,4 +76,3 @@ class AddIncome extends \Core\Controller
       }
     }
     */
-}
