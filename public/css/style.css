@@ -2,7 +2,6 @@ body
 {
 	background: url(/img/back.jpg) center center ;
 	background-color: cover;
-	color: #b38600;
 	font-size: 1.15rem;
 	width: 100vw;
 	height: 100vh;
@@ -12,7 +11,10 @@ img
 {
 	border-radius: 10px;
 }
-
+.fontColor
+{
+	color: #b38600;
+}
 .container
 {
 	margin-left: auto;
@@ -84,16 +86,9 @@ img
 	font-weight: bold;
 	font-size: 35px;
 	border: 9px double;
+	color: #b38600;
 }
-#comment
-{
-	width: 100%;
-	resize: none;
-}
-#amount
-{
-	width: 100%;
-}
+
 a
 {
 	width: 100%;
@@ -121,10 +116,10 @@ a:hover
 	font-size:40px;
 	font-weight: bold;
 }
-#show
+.balanceFrom
 {
-	letter-spacing: 5px;
-	font-size: 20px;
+	font-weight: bold;
+	font-size: 25px;
 }
 h1
 {
@@ -248,9 +243,9 @@ width: 300px;
 textarea {
   resize: none;
 }
-.incomeForm
+.styleForm
 {
 	margin-top: 5px;
-	margin-bottom: 5px;		
+	margin-bottom: 5px;
 	border: double 10px #4d0000;
 }

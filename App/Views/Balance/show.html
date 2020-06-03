@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Finanse pod lupą{% endblock %}
+
+{% block footer %}
+
+<script src="/js/jsDate.js"></script>
+
+{% endblock %}
+
+
+{% block body %}
+
+<main class="fontColor">
+  <header>
+    <div class="row mt-5 mb-3">
+      <div class="col-lg-4 ">
+        <img class="mt-2" src="../img/balance.jpg" alt="balans1" style="width:100%;">
+      </div>
+      <div class="col-lg-4 text-center marginY">
+        <p class="balanceTitle" >Przegląd finansów</p>
+      </div>
+      <div class="col-lg-4">
+        <img class="mt-2" src="../img/balance.jpg" alt="balans2" style="width:100%;">
+      </div>
+    </div>
+  </header>
+  <section>
+    <div class="mt-0 mb-3">
+      <div class="row">
+          <div class="col-lg-5 text-center" style="border: dashed 3px #b38600;">
+            <form  id="balance" method="post" action="/balance/getBalance">
+            <p class="balanceTitleDate my-0">Wybierz okres:</p>
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  <label class="balanceFrom" for="fromDate">Od:</label>
+                  <input type="date" id="fromDate" name="fromDate" class="form-control">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <label class="balanceFrom" for="dateTo">Do:</label>
+                  <input type="date" id="dateTo" name="dateTo" class="form-control">
+                </div>
+              </div>
+            </div>
+            <button type="button" onclick='currentMonth()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Bieżący miesiąc</h5></button>
+            <button type="button" onclick='previousMonth()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Popredzni miesiąc</h5></button>
+            <button type="button"  onclick='currentYear()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Bieżacy rok</h5></button>
+            <button type="button" onclick='previousYear()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Popredzni rok</h5></button>
+            <button type="submit" class="btn btn-success  btn-block mb-1"><h5 class="mt-1">Pokaż</h5></button>
+            </form>
+          </div>
+        <div class="col-lg-7">
+          {% if income is not empty %}
+          <table style="width:100%">
+            <tr>
+              {% for incomeName in income.incomeName %}
+                <th>{{ incomeName }}</th>
+              {% endfor %}
+            </tr>
+            <tr>
+              {% for incomeAmount in income.incomeAmount %}
+                  <td>{{ incomeAmount }}</td>
+              {% endfor %}
+            </tr>
+
+
+
+
+
+          </table>
+          {% endif %}
+        </div>
+      </div>
+      <div id="showResult">
+        <div class="row justify-content-start">
+          <div class="col-xl-6">
+            <div class="chart-cnt">
+              <canvas id="myChart2" width="600" height="200"></canvas>
+            </div>
+          </div>
+          <div class="col-xl-6">
+            <div class="chart-cnt">
+              <canvas id="myChart" width="600" height="200"></canvas>
+            </div>
+          </div>
+        </div>
+      <div class="row justify-content-start">
+        <div class="col-lg-3">
+          <table style=width:100%;>
+            <tr style="font-weight:bold;"><td colspan=2>Podsumowanie przychodów:</td></tr>
+<?php
+$fetchIncome = mysqli_query($connect, "SELECT income_category_assigned_to_user_id, SUM(amount) FROM incomes WHERE user_id = '$userID' AND date_of_income >= '$dateFrom' AND date_of_income <= '$dateTo' GROUP BY income_category_assigned_to_user_id");
+while ($rowIncome = mysqli_fetch_array($fetchIncome))
+{
+  $summIncome+=$rowIncome["SUM(amount)"];
+  $categoryIdIncome = $rowIncome["income_category_assigned_to_user_id"];
+  $catNameQueryIn = "SELECT name FROM incomes_category_assigned_to_users WHERE id = '$categoryIdIncome'";
+  $incomeCategoryNameSQLquerry = $connect->query($catNameQueryIn);
+  $rowCatIn = $incomeCategoryNameSQLquerry->fetch_assoc();
+  echo '<tr><td>'.$rowCatIn['name'].'</td><td>'.$rowIncome["SUM(amount)"].' zł'.'</td></tr>';
+  $incomeCategoryNameSQLquerry->free_result();
+}
+$fetchIncome->free_result();
+?>
+          </table>
+        </div>
+        <div class="col-lg-3">
+          <table style=width:100%;>
+            <tr style="font-weight:bold;"><td colspan=2>Podsumowanie wydatków:</td></tr>
+<?php
+$fetchExpense = mysqli_query($connect, "SELECT expense_category_assigned_to_user_id, SUM(amount) FROM expenses WHERE user_id = '$userID' AND date_of_expense >= '$dateFrom' AND date_of_expense <= '$dateTo' GROUP BY expense_category_assigned_to_user_id");
+while ($rowExpense = mysqli_fetch_array($fetchExpense))
+{
+  $summExpense+=$rowExpense["SUM(amount)"];
+  $categoryIdExpense = $rowExpense["expense_category_assigned_to_user_id"];
+  $catNameQueryEx = "SELECT name FROM expenses_category_assigned_to_users WHERE id = '$categoryIdExpense'";
+  $expenseCategoryNameSQLquerry = $connect->query($catNameQueryEx);
+  $rowCatEx = $expenseCategoryNameSQLquerry->fetch_assoc();
+  echo '<tr><td>'.$rowCatEx['name'].'</td><td>'.$rowExpense["SUM(amount)"].' zł'.'</td></tr>';
+  $expenseCategoryNameSQLquerry->free_result();
+}
+$connect->close();
+$fetchExpense->free_result();
+?>
+          </table>
+        </div>
+        <div class="col-lg-6 text-center">
+          <span style="font-weight:bold;" class="h1">PODSUMOWANIE</span>
+          <p class="h5">Wydatki: <?php echo $summExpense.' zł';?></p>
+          <p class="h5">Przychody: <?php echo $summIncome.' zł';?></p>
+          <p class="h3">SALDO</p>
+          <p><?php echo $summIncome-$summExpense.' zł';?></p>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}
