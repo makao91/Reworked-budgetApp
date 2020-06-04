@@ -3,28 +3,17 @@
 namespace App\Models;
 
 use App\Auth;
-
-
 use PDO;
 
-/**
- * Example user model
- *
- * PHP version 7.0
- */
 class Income extends \Core\Model
 {
-
   public $errors = [];
-
   public function __construct($data = [])
   {
     foreach ($data as $key => $value) {
       $this->$key = $value;
     };
-
   }
-
 
   public static function selectPlugin($selectSearchTerm)
   {
@@ -56,7 +45,6 @@ class Income extends \Core\Model
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-
   public function save()
   {
     $user = Auth::getUser();
@@ -83,7 +71,7 @@ class Income extends \Core\Model
 
 
   public function validation()
-  {    
+  {
     if($this->incomeAmount == 0){
       $this->errors[] = 'Kwota jest wymagana.';
     }
@@ -94,8 +82,4 @@ class Income extends \Core\Model
       $this->errors[] = 'Kategoria jest wymagana.';
     }
   }
-
-
-
-
 }

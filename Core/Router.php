@@ -75,12 +75,10 @@ class Router
                         $params[$key] = $match;
                     }
                 }
-
                 $this->params = $params;
                 return true;
             }
         }
-
         return false;
     }
 
@@ -191,7 +189,6 @@ class Router
                 $url = '';
             }
         }
-
         return $url;
     }
 
@@ -208,7 +205,6 @@ class Router
         if (array_key_exists('namespace', $this->params)) {
             $namespace .= $this->params['namespace'] . '\\';
         }
-
         return $namespace;
     }
 }

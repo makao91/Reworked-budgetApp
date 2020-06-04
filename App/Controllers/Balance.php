@@ -3,19 +3,13 @@
 namespace App\Controllers;
 
 use \Core\View;
-use \App\Auth;
-use \App\Flash;
 use \App\Models\GetBalance;
 use \App\Models\IncomeChart;
 use \App\Models\ExpenseChart;
 
-
-
 class Balance extends Authenticated
 {
   private $data;
-  private $timeGap;
-
 
   public function showAction()
    {
@@ -24,7 +18,6 @@ class Balance extends Authenticated
 
    public function getBalanceAction()
    {
-
      $this->data = new GetBalance($_POST);
      $this->data->getIncomes();
      $this->data->getExpenses();
@@ -44,7 +37,6 @@ class Balance extends Authenticated
      $var = $json->getExpensesData();
      echo json_encode($var);
    }
-
 }
 
   /*  public function editAction()

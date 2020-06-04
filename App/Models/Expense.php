@@ -3,15 +3,8 @@
 namespace App\Models;
 
 use App\Auth;
-
-
 use PDO;
 
-/**
- * Example user model
- *
- * PHP version 7.0
- */
 class Expense extends \Core\Model
 {
 
@@ -22,9 +15,7 @@ class Expense extends \Core\Model
     foreach ($data as $key => $value) {
       $this->$key = $value;
     };
-
   }
-
 
   public static function selectExpensePlugin($selectSearchTerm)
   {
@@ -46,7 +37,6 @@ class Expense extends \Core\Model
     };
     echo json_encode($data);
   }
-
 
 
   public static function selectPaymentMethodPlugin($selectSearchTerm)
@@ -121,6 +111,4 @@ class Expense extends \Core\Model
       $this->errors[] = 'Kategoria jest wymagana.';
     }
   }
-
-
 }

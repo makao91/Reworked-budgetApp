@@ -18,13 +18,14 @@ class Token
     }else{
       $this->token = bin2hex(random_bytes(16));
     }
-
   }
+
 
   public function getValue()
   {
     return $this->token;
   }
+
 
   public function getHash()
   {

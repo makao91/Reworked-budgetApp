@@ -11,16 +11,13 @@ use \App\Models\RememberedLogin;
  */
 class Auth
 {
-
   public static function login($user, $remember_me)
   {
     session_regenerate_id(true);
     $_SESSION['user_id'] = $user->id;
 
     if($remember_me){
-
       if($user->rememberLogin()){
-
         setcookie('remember_me', $user->remember_token, $user->expiry_timestamp, '/');
       }
     }
@@ -45,15 +42,18 @@ class Auth
     static::forgetLogin();
   }
 
+
   public static function rememberRequestedPage()
   {
     $_SESSION['return_to'] = $_SERVER['REQUEST_URI'];
   }
 
+
   public static function getReturnToPage()
   {
     return $_SESSION['return_to'] ?? '/menu/index';
   }
+
 
   public static function getUser()
   {
@@ -63,6 +63,7 @@ class Auth
       return static::loginFromRememberCookie();
     }
   }
+
 
 protected static function loginFromRememberCookie()
 {

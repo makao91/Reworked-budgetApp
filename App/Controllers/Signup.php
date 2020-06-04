@@ -43,8 +43,8 @@ class Signup extends \Core\Controller
       $this->redirect('/signup/activated');
     }
 
-    public function activatedAction()    {
-
+    public function activatedAction()
+    {
       Flash::addMessage('Rejestracja zakończona sukcesem. Można się zalogować.', Flash::SUCCESS);
       View::renderTemplate('Home/index.html');
     }

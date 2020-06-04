@@ -7,8 +7,6 @@ use PDO;
 
 class RememberedLogin extends \Core\Model
 {
-
-
   public static function findByToken($token)
   {
     $token = new Token($token);
@@ -49,5 +47,4 @@ class RememberedLogin extends \Core\Model
 
     $stmt->execute();
   }
-
 }

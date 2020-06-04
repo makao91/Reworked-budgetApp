@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use \Core\View;
-use \App\Auth;
 use \App\Flash;
 use \App\Models\Expense;
 
@@ -16,14 +15,8 @@ use \App\Models\Expense;
 class AddExpense extends Authenticated
 {
 
-  protected function before()
-  {
-    parent::before();
-    $this->user = Auth::getUser();
-  }
-
-    public function showAction()
-     {
+  public function showAction()
+    {
       View::renderTemplate('AddExpense/show.html');
     }
 
