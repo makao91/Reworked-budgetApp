@@ -9,7 +9,6 @@
 
 <script>
   $(document).ready(function(){
-
     $('#formPassword').validate({
       rules: {
         password: {
@@ -25,7 +24,6 @@
         }
       }
     });
-
     $('#inputPassword').hideShowPassword({
       show: false,
       innerToggle: focus,
@@ -49,14 +47,12 @@
       }
     });
   });
-
 </script>
-
 {% endblock %}
 
 {% block body %}
-
     <p class="menuM balanceTitle text-center marginY">Resetowanie hasła</p>
+
     {% if user.errors is not empty %}
       <p>Errors:</p>
         <ul>
@@ -74,5 +70,5 @@
       </div>
       <button type="submit" class="btn btn-primary btn-lg btn-block">Zmień</button>
     </form>
-
+    
 {% endblock %}

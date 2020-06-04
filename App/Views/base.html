@@ -8,15 +8,16 @@
 	  <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji+2:400,700&display=swap" rel="stylesheet" type="text/css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" type="text/css"/>
-
     <link rel="stylesheet" href="/css/style.css" type="text/css"/>
 </head>
 <body>
+
     {% for message in flash_messages %}
       <div class="alert alert-{{message.type}}">
         {{message.body}}
       </div>
     {% endfor %}
+    
   <div class="container text-center">
 
     {% block body %}

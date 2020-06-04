@@ -40,7 +40,7 @@ class View
      * @return void
      */
     public static function renderTemplate($template, $args = [])
-    {      
+    {
         echo static::getTemplate($template, $args);
     }
 
@@ -55,7 +55,6 @@ class View
             $twig->addGlobal('current_user', \App\Auth::getUser());
             $twig->addGlobal('flash_messages', \App\Flash::getMessages());
         }
-
         return $twig->render($template, $args);
     }
 }

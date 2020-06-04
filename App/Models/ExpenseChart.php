@@ -3,36 +3,22 @@
 namespace App\Models;
 
 use App\Auth;
-
-
 use PDO;
 
-
-/**
- * Example user model
- *
- * PHP version 7.0
- */
 class ExpenseChart extends \Core\Model
 {
-
 
   public function __construct($data = [])
   {
     foreach ($data as $key => $value) {
       $this->$key = $value;
     };
-
-
   }
-
 
   public function getExpensesData()
   {
-
     $user = Auth::getUser();
     $rawData = static::fetchFromDatabaseExpenses($user->id, $this->dateFrom, $this->dateTo);
-
     $data = array();
 
     foreach ($rawData as $row) {
@@ -52,7 +38,7 @@ class ExpenseChart extends \Core\Model
     $stmt = $db->prepare($sql);
 
     $stmt->bindValue(':categoryIdExpense', $categoryIdExpense, PDO::PARAM_STR);
-
+    
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
@@ -72,7 +58,4 @@ class ExpenseChart extends \Core\Model
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
-
-
-
 }

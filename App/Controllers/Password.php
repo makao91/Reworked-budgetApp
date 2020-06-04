@@ -5,18 +5,13 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Models\User;
 
-/**
- * Home controller
- *
- * PHP version 7.0
- */
 class Password extends \Core\Controller
 {
 
     public function requestResetAction()
     {
       User::sendPasswordReset($_POST['emailReset']);
-      }
+    }
 
     public function resetAction()
     {
@@ -29,7 +24,6 @@ class Password extends \Core\Controller
     public function resetPasswordAction()
     {
       $token = $_POST['token'];
-
       $user = $this->getUserOrExit($token);
 
       if($user->resetPassword($_POST['password']))
@@ -53,7 +47,5 @@ class Password extends \Core\Controller
           View::renderTemplate('Password/token_expired.html');
           exit;
         }
-
     }
-
 }

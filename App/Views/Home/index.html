@@ -5,7 +5,6 @@
 {% block footer %}
 
 <script>
-
   $(document).ready(function(){
     $('#reset-button').click(function(){
      var emailReset = $('#emailReset').val();
@@ -23,20 +22,14 @@
                  else {
                    alert("Konto o takim adresie nie istnieje.");
                  }
-
                }
           });
     });
   });
-
 </script>
-
 {% endblock %}
 
-
-
 {% block body %}
-
 <audio autoplay loop>
 <source src="sound/music.mp3" type="audio/mpeg">
 </audio>
@@ -46,7 +39,6 @@
     <h1 class="elegantShadow">Reign of money</h1>
   </div>
 </header>
-
   <div class="row">
   <div class="col-lg-8">
       <div id="carouselExampleControls" class="carousel slide carousel-fade" data-ride="carousel">
@@ -61,7 +53,7 @@
               <p class="h4 text-center ">Czy wiesz, że 2.8 mln Polaków posiada przeterminowane długi o łącznej kwocie przekraczającej 76 mld złotych (wg rap. InfoDług)? </p>
             </div>
             <div class="col-md-6">
-                  <img src="../img/cat.jpg" class="d-block w-100" alt="cat">
+              <img src="../img/cat.jpg" class="d-block w-100" alt="cat">
             </div>
           </div>
         </div>
@@ -126,7 +118,6 @@
     <p>Nie masz konta? <a href="/signup/new">Zarejestruj się</a>.</p>
   </div>
 </div>
-
 <div class="modal fade" id="resetPassword" tabindex="-1" role="dialog" aria-labelledby="resetHasła" aria-hidden="true">
 <div class="modal-dialog">
   <div class="modal-content">
@@ -151,6 +142,5 @@
   </div>
 </div>
     {% endif %}
-
 </main>
 {% endblock %}

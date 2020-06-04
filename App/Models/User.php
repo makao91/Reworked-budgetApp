@@ -4,14 +4,8 @@ namespace App\Models;
 use \App\Token;
 use \App\Mail;
 use \Core\View;
-
 use PDO;
 
-/**
- * Example user model
- *
- * PHP version 7.0
- */
 class User extends \Core\Model
 {
 
@@ -23,7 +17,6 @@ class User extends \Core\Model
       $this->$key = $value;
     };
   }
-
 
 
   public function save()
@@ -55,8 +48,6 @@ class User extends \Core\Model
   }
 
 
-
-
   public function validation()
   {
     if($this->name == ''){
@@ -64,7 +55,7 @@ class User extends \Core\Model
     }
 
     if(filter_var($this->email, FILTER_VALIDATE_EMAIL) === false){
-      $this->errors[] = 'Nipoprawny format email.';
+      $this->errors[] = 'Niepoprawny format email.';
     }
     if(static::emailExists($this->email, $this->id ?? null)){
       $this->errors[] = 'Wskazany email już istnieje w bazie. Zaloguj się, lub wprowadź inny.';
@@ -74,17 +65,14 @@ class User extends \Core\Model
         if(strlen($this->password) < 6){
           $this->errors[] = 'Wprowadź conajmniej 6 znaków do hasła';
         }
-
         if(preg_match('/.*[a-z]+.*/i', $this->password) == 0){
           $this->errors[] = 'Hasło wymaga conajmniej jednej litery.';
         }
-
         if(preg_match('/.*\d+.*/', $this->password) == 0){
           $this->errors[] = 'Hasło wymaga conajmniej jednej cyfry.';
         }
     }
   }
-
 
 
   public static function emailExists($email, $ignore_id = null)
@@ -97,7 +85,6 @@ class User extends \Core\Model
       }
       return false;
   }
-
 
 
   public static function findByEmail($email)
@@ -116,7 +103,6 @@ class User extends \Core\Model
   }
 
 
-
   public static function authenticate($email, $password)
   {
     $user = static::findByEmail($email);
@@ -129,7 +115,6 @@ class User extends \Core\Model
       return false;
     }
   }
-
 
 
   public static function findById($id)
@@ -146,7 +131,6 @@ class User extends \Core\Model
 
     return $stmt->fetch();
   }
-
 
 
   public function rememberLogin()
@@ -184,7 +168,6 @@ class User extends \Core\Model
   }
 
 
-
   protected function startPasswordReset()
   {
     $token = new Token();
@@ -205,7 +188,6 @@ class User extends \Core\Model
 
     return $stmt->execute();
   }
-
 
 
   protected function sendPasswordResetEmail()
@@ -267,7 +249,6 @@ class User extends \Core\Model
   }
 
 
-
   public function resetPassword($password)
   {
     $this->password = $password;
@@ -295,7 +276,6 @@ class User extends \Core\Model
   }
 
 
-
   public function sendActivationEmail()
   {
     $url = 'http://'.$_SERVER['HTTP_HOST'].'/signup/activate/'.$this->activation_token;
@@ -306,13 +286,10 @@ class User extends \Core\Model
   }
 
 
-
   public static function activate($value)
   {
     $token = new Token($value);
     $hashed_token = $token->getHash();
-
-
 
     $sql = 'UPDATE users
             SET is_active = 1,
@@ -350,6 +327,7 @@ public function addDefaultCategoriesExpenses()
     static::executeDefaultCategories($sql, $categoryName, $user->id);
   };
 }
+
 public function addDefaultPaymentMethods()
 {
   $user = static::findByEmail($this->email);

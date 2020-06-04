@@ -39,7 +39,6 @@ function currentMonth ()
   var firstDayOfTheMonth = "01";
   var lastDayInt = last.getDate();
 
-
   var firstDayFull = rok+"-"+miesiac+"-"+firstDayOfTheMonth;
   var lastDayFull = rok+"-"+miesiac+"-"+lastDayInt;
 

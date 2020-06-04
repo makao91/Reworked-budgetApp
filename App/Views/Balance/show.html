@@ -7,15 +7,10 @@
 <script src="/js/jsDate.js"></script>
 <script src="/js/app.js"></script>
 
-
 <script>
-
-$(document).ready(function(){
-  $('#showButt').click(function(){
+window.onload = function(){
      var dateFrom = $('#fromDate').val();
      var dateTo = $('#dateTo').val();
-     var name = '';
-     var amount = '';
      $.ajax({
           url:"/Balance/ajaxIncome",
           method:"POST",
@@ -48,16 +43,11 @@ $(document).ready(function(){
             var chart = BuildChartExpense(labels, values, 'Wydatki');
           }
      });
-    });
-
-  });
-
+    }
 </script>
 {% endblock %}
 
-
 {% block body %}
-
 <main class="fontColor">
   <header>
     <div class="row mt-5 mb-3">
@@ -82,30 +72,32 @@ $(document).ready(function(){
               <div class="col-6">
                 <div class="form-group">
                   <label class="balanceFrom" for="fromDate">Od:</label>
-                  <input type="date" id="fromDate" name="fromDate" class="form-control">
+                  <input type="date" id="fromDate" name="fromDate" value="{{balance.fromDate}}" class="form-control">
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-group">
                   <label class="balanceFrom" for="dateTo">Do:</label>
-                  <input type="date" id="dateTo" name="dateTo" class="form-control">
+                  <input type="date" id="dateTo" name="dateTo" value="{{balance.dateTo}}" class="form-control">
                 </div>
               </div>
             </div>
             <button type="button" onclick='currentMonth()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Bieżący miesiąc</h5></button>
-            <button type="button" onclick='previousMonth()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Popredzni miesiąc</h5></button>
+            <button type="button" onclick='previousMonth()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Poprzedni miesiąc</h5></button>
             <button type="button"  onclick='currentYear()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Bieżacy rok</h5></button>
-            <button type="button" onclick='previousYear()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Popredzni rok</h5></button>
-            <button type="button" id="showButt" name="showButt" class="btn btn-success  btn-block mb-1"><h5 class="mt-1">Pokaż</h5></button>
+            <button type="button" onclick='previousYear()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Poprzedni rok</h5></button>
+            <button type="submit" class="btn btn-success btn-block mb-1"><h5 class="mt-1">Pokaż</h5></button>
+
             </form>
           </div>
         <div class="col-lg-7">
+
           {% if balance is not empty %}
           <div class="row">
             <div class="col-12">
             <span style="font-weight:bold;" class="h1">PODSUMOWANIE</span>
-            <h5>Wydatki:  {{balance.expenseSaldo}} zł</h5>
-            <h5>Przychody: {{balance.incomeSaldo}} zł</h5>
+            <h5>Wydatki razem:  {{balance.expenseSaldo}} zł</h5>
+            <h5>Przychody razem: {{balance.incomeSaldo}} zł</h5>
             <h2>SALDO</h2>
             <h2 id="saldo">{{balance.incomeSaldo - balance.expenseSaldo}} zł</h2>
             </div>
@@ -137,15 +129,16 @@ $(document).ready(function(){
                 <div class="col-sm-6 float-left">
                   {% for expenseAmount in balance.expenseAmount %}
                       <div>{{expenseAmount}} zł</div>
-
                   {% endfor %}
                 </div>
               </div>
               {% endif %}
+
             </div>
           </div>
         </div>
       </div>
+      {% if balance is not empty %}
       <div class="row justify-content-start">
         <div class="col-xl-6">
           <div class="chart-cnt">
@@ -158,12 +151,8 @@ $(document).ready(function(){
           </div>
         </div>
       </div>
-
+      {% endif %}
     </div>
   </section>
 </main>
-
-
-
-
 {% endblock %}

@@ -3,36 +3,22 @@
 namespace App\Models;
 
 use App\Auth;
-
-
 use PDO;
 
-
-/**
- * Example user model
- *
- * PHP version 7.0
- */
 class IncomeChart extends \Core\Model
 {
-
-
   public function __construct($data = [])
   {
     foreach ($data as $key => $value) {
       $this->$key = $value;
     };
-
-
   }
 
 
   public function getIncomesData()
   {
-
     $user = Auth::getUser();
     $rawData = static::fetchFromDatabaseIncomes($user->id, $this->dateFrom, $this->dateTo);
-
     $data = array();
 
     foreach ($rawData as $row) {
@@ -72,7 +58,4 @@ class IncomeChart extends \Core\Model
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
-
-
-
 }

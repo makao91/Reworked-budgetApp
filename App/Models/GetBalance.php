@@ -3,18 +3,10 @@
 namespace App\Models;
 
 use App\Auth;
-
-
 use PDO;
 
-/**
- * Example user model
- *
- * PHP version 7.0
- */
 class GetBalance extends \Core\Model
 {
-
   public $incomeName = [];
   public $incomeAmount = [];
   public $incomeSaldo = 0;
@@ -27,8 +19,6 @@ class GetBalance extends \Core\Model
     foreach ($data as $key => $value) {
       $this->$key = $value;
     };
-
-
   }
 
 
@@ -38,11 +28,9 @@ class GetBalance extends \Core\Model
     $rawData = static::fetchFromDatabaseIncomes($user->id, $this->fromDate, $this->dateTo);
 
     $data = array();
-
     foreach ($rawData as $row) {
       $categoryIdIncome = $row["income_category_assigned_to_user_id"];
       $incomeCategoryName = static::getCategoryNameIncome($categoryIdIncome);
-
       foreach ($incomeCategoryName as $row2) {
         $this->incomeName[] = $row2['name'];
         $this->incomeAmount[] = $row["SUM(amount)"];
@@ -86,11 +74,9 @@ class GetBalance extends \Core\Model
     $rawData = static::fetchFromDatabaseExpenses($user->id, $this->fromDate, $this->dateTo);
 
     $data = array();
-
     foreach ($rawData as $row) {
       $categoryIdExpense = $row["expense_category_assigned_to_user_id"];
       $expenseCategoryName = static::getCategoryNameExpense($categoryIdExpense);
-
       foreach ($expenseCategoryName as $row2) {
         $this->expenseName[] = $row2['name'];
         $this->expenseAmount[] = $row["SUM(amount)"];
@@ -126,9 +112,4 @@ class GetBalance extends \Core\Model
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
-
-
-
-
-
 }

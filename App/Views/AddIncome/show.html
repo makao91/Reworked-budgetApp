@@ -23,7 +23,6 @@ $(document).ready(function(){
                },
                processResults: function (response) {
                  return {
-
                     results: response
                  };
                },
@@ -39,7 +38,7 @@ $(document).ready(function(){
        }
      },
      messages:{
-       incomeAmount: 'Wpisz kwotę. Przykład 10.50',
+       incomeAmount: 'Wpisz poprawną kwotę. Przykład 10.50',
        incomeDate: 'Zaznacz datę.',
        incomeCategory: 'Zaznacz kategorię choćby "Inne".'
      }
@@ -76,7 +75,7 @@ $(document).ready(function(){
             </div>
             <div class="row marginX form-group mb-0">
               <div class="col-3 px-0">
-                <button type="button" onclick='currentDateYMD("incomeDate")' class="btn btn-info">Dzisiaj?</button>
+                <button type="button" onclick='currentDateYMD("incomeDate")' class="btn btn-warning">Dzisiaj?</button>
               </div>
               <div class="col-6 px-0">
                 <div class="form-group">
@@ -84,7 +83,7 @@ $(document).ready(function(){
                 </div>
               </div>
               <div class="col-3 px-0">
-                <button type="button" onclick='previousDateYMD("incomeDate")' class="btn btn-info">Wczoraj?</button>
+                <button type="button" onclick='previousDateYMD("incomeDate")' class="btn btn-warning">Wczoraj?</button>
               </div>
             </div>
             <div class="form-group text-center">

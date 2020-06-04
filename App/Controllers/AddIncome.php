@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use \Core\View;
-use \App\Auth;
 use \App\Flash;
 use \App\Models\Income;
 
@@ -16,13 +15,6 @@ use \App\Models\Income;
 class AddIncome extends \Core\Controller
 {
 
-  protected function before()
-  {
-    parent::before();
-    $user = Auth::getUser();
-
-  }
-
     public function showAction()
      {
       View::renderTemplate('AddIncome/show.html');
@@ -34,11 +26,9 @@ class AddIncome extends \Core\Controller
     Income::selectPlugin($searchTerm);
   }
 
-
   public function createAction()
   {
     $income = new Income($_POST);
-
     if($income->save())
     {
       Flash::addMessage('Przychód dodano pomyślnie');
