@@ -6,15 +6,16 @@ use \Core\View;
 use \App\Auth;
 use \App\Flash;
 use \App\Models\GetBalance;
+use \App\Models\IncomeChart;
+use \App\Models\ExpenseChart;
 
 
-/**
- * Home controller
- *
- * PHP version 7.0
- */
+
 class Balance extends Authenticated
 {
+  private $data;
+  private $timeGap;
+
 
   public function showAction()
    {
@@ -23,16 +24,26 @@ class Balance extends Authenticated
 
    public function getBalanceAction()
    {
-     $balance = new GetBalance($_POST);
 
-     $balance->getIncomes();
-     var_dump($balance);
+     $this->data = new GetBalance($_POST);
+     $this->data->getIncomes();
+     $this->data->getExpenses();
      View::renderTemplate('Balance/show.html', [
-       'income' => $balance,
+       'balance' => $this->data,
      ]);
-
    }
-
+   public function ajaxIncomeAction()
+   {
+     $json = new IncomeChart($_POST);
+     $var = $json->getIncomesData();
+     echo json_encode($var);
+   }
+   public function ajaxExpenseAction()
+   {
+     $json = new ExpenseChart($_POST);
+     $var = $json->getExpensesData();
+     echo json_encode($var);
+   }
 
 }
 
