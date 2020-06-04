@@ -12,12 +12,12 @@ use \App\Models\Expense;
  *
  * PHP version 7.0
  */
-class AddExpense extends Authenticated
+class Addexpense extends Authenticated
 {
 
   public function showAction()
     {
-      View::renderTemplate('AddExpense/show.html');
+      View::renderTemplate('Addexpense/show.html');
     }
 
   public function selectExpenseAction()

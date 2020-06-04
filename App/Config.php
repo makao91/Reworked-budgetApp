@@ -14,25 +14,25 @@ class Config
      * Database host
      * @var string
      */
-     const DB_HOST = 'localhost';
+    const DB_HOST = 'localhost';
 
-     /**
-      * Database name
-      * @var string
-      */
-     const DB_NAME = 'mvclogin';
+    /**
+     * Database name
+     * @var string
+     */
+    const DB_NAME = 'marcinka_budget';
 
-     /**
-      * Database user
-      * @var string
-      */
-     const DB_USER = 'mvcuser';
+    /**
+     * Database user
+     * @var string
+     */
+    const DB_USER = 'marcinka_app';
 
-     /**
-      * Database password
-      * @var string
-      */
-     const DB_PASSWORD = 'kolo';
+    /**
+     * Database password
+     * @var string
+     */
+    const DB_PASSWORD = 'Kolobolo_07';
 
     /**
      * Show or hide error messages on screen

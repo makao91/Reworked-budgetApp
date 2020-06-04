@@ -12,12 +12,12 @@ use \App\Models\Income;
  *
  * PHP version 7.0
  */
-class AddIncome extends \Core\Controller
+class Addincome extends \Core\Controller
 {
 
     public function showAction()
      {
-      View::renderTemplate('AddIncome/show.html');
+      View::renderTemplate('Addincome/show.html');
     }
 
   public function selectAction()
