@@ -12,7 +12,7 @@
 $(document).ready(function(){
   $("#expenseCategory").select2({
              ajax: {
-               url: "/AddExpense/selectExpense",
+               url: "/Addexpense/selectExpense",
                type: "post",
                dataType: 'json',
                delay: 250,
@@ -31,7 +31,7 @@ $(document).ready(function(){
              });
   $("#paymentMethod").select2({
             ajax: {
-              url: "/AddExpense/selectPaymentMethod",
+              url: "/Addexpense/selectPaymentMethod",
               type: "post",
               dataType: 'json',
               delay: 250,
@@ -74,9 +74,7 @@ $(document).ready(function(){
 {% block body %}
 
 <main>
-  <nav>
-    <a href="/menu/index"><button type="button" class="btn btn-lg btn-warning btn-warning-inverse sticky">Powrót do menu głównego</button></a>
-  </nav>
+
   <header>
     <h1 class="menuM balanceTitle text-center marginY py-2">Dodawanie wydatku</h1>
   </header>
@@ -132,6 +130,9 @@ $(document).ready(function(){
         </div>
     <div class="col-lg-4 marginY">
       <img class="mt-2" src="../img/expense.jpg" alt="balans2" style="width:100%;">
+      <nav>
+        <a href="/menu/index"><button type="button" class="btn btn-lg btn-warning btn-warning-inverse">Powrót do menu głównego</button></a>
+      </nav>
     </div>
   </div>
 </main>
