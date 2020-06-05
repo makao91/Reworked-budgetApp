@@ -246,3 +246,7 @@ textarea {
 	border: double 10px #4d0000;
 	display:
 }
+.dropdown-menu
+{
+	transform: none !important;
+}
