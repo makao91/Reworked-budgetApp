@@ -13,7 +13,14 @@ class Balance extends Authenticated
 
   public function showAction()
    {
-      View::renderTemplate('Balance/show.html');
+     $fromDate = date("Y-m-01");
+     $dateTo = date("Y-m-t");
+      View::renderTemplate('Balance/show.html', [
+        'firstDay' => $firstDay,
+        'lastDay' => $lastDay
+      ]);
+      $firstDay = null;
+      $lastDay = null;
    }
 
    public function getBalanceAction()

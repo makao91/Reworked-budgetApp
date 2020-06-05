@@ -20,19 +20,19 @@ class Config
      * Database name
      * @var string
      */
-    const DB_NAME = 'marcinka_budget';
+    const DB_NAME = 'mvclogin';
 
     /**
      * Database user
      * @var string
      */
-    const DB_USER = 'marcinka_app';
+    const DB_USER = 'mvcuser';
 
     /**
      * Database password
      * @var string
      */
-    const DB_PASSWORD = 'Kolobolo_07';
+    const DB_PASSWORD = 'kolo';
 
     /**
      * Show or hide error messages on screen

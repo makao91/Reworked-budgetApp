@@ -11,9 +11,13 @@ use \Core\View;
  */
 class Menu extends Authenticated
 {
-
     public function indexAction()
      {
-      View::renderTemplate('Menu/index.html');
+       $fromDate = date("Y-m-01");
+       $dateTo = date("Y-m-t");
+      View::renderTemplate('Menu/index.html', [
+        'fromDate' => $fromDate,
+        'dateTo' => $dateTo
+      ]);
     }
 }
