@@ -28,8 +28,9 @@ class Balance extends Authenticated
      $this->data = new GetBalance($_POST);
      $this->data->getIncomes();
      $this->data->getExpenses();
+     var_dump( $this->data);
      View::renderTemplate('Balance/show.html', [
-       'balance' => $this->data,
+       'balance' => $this->data
      ]);
    }
    public function ajaxIncomeAction()

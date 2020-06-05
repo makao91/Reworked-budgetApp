@@ -15,13 +15,12 @@ class Income extends \Core\Model
     };
   }
 
-  public static function selectPlugin($selectSearchTerm)
+  public static function selectPlugin($selectSearchTerm = false)
   {
-    $user = Auth::getUser();
+
     if(!isset($selectSearchTerm))
       {
-        $sql = "SELECT * FROM incomes_category_assigned_to_users WHERE user_id = '$user->id 'ORDER BY name";
-        $fetchData = static::getUsersSelect($sql);
+        $fetchData = static::getCategorryName();
       }
     else
       {
@@ -81,5 +80,12 @@ class Income extends \Core\Model
     if($this->incomeCategory == 1){
       $this->errors[] = 'Kategoria jest wymagana.';
     }
+  }
+
+  public static function getCategorryName()
+  {
+    $user = Auth::getUser();
+    $sql = "SELECT * FROM incomes_category_assigned_to_users WHERE user_id = '$user->id 'ORDER BY name";
+    return  $fetchData = static::getUsersSelect($sql);
   }
 }
