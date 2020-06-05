@@ -25,7 +25,13 @@
       <div class="btn-group-vertical btn-block" role="group" aria-label="First group">
         <a href="/addincome/show"><button type="button" class="btn btn-primary btn-lg btn-block" >Dodaj przychód</button></a>
         <a href="/addexpense/show"><button type="button" class="btn btn-danger btn-lg btn-block mt-1" >Dodaj wydatek</button></a>
-        <a href="/balance/show"><button type="button" class="btn btn-success btn-lg btn-block mt-1">Przeglądaj bilans</button></a>
+        <form style="width:100%;" method="post" action="/balance/getBalance">
+          <input hidden type="date" id="fromDate" name="fromDate" value={{fromDate}} class="form-control">
+          <input hidden type="date" id="dateTo" name="dateTo" value={{dateTo}} class="form-control">
+          <button type="submit" class="btn btn-success btn-lg btn-block mt-1">Przeglądaj bilans</button>
+        </form>
+
+
         <a href=""><button type="button" class="btn btn-info btn-lg btn-block mt-1" disabled>Ustawienia</button></a>
         <a href="/logout"><button type="button" class="btn btn-warning btn-lg btn-block mt-1">Wyloguj się</button></a>
       </div>

@@ -9,6 +9,7 @@
 
 <script>
 window.onload = function(){
+
      var dateFrom = $('#fromDate').val();
      var dateTo = $('#dateTo').val();
      $.ajax({
@@ -75,13 +76,21 @@ window.onload = function(){
               <div class="col-6">
                 <div class="form-group">
                   <label class="balanceFrom" for="fromDate">Od:</label>
+                  {% if firstDay is not empty %}
+                  <input type="date" id="fromDate" name="fromDate" value="{{firstDay}}" class="form-control">
+                  {% else %}
                   <input type="date" id="fromDate" name="fromDate" value="{{balance.fromDate}}" class="form-control">
+                  {% endif %}
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-group">
                   <label class="balanceFrom" for="dateTo">Do:</label>
+                  {% if lastDay is not empty %}
+                  <input type="date" id="dateTo" name="dateTo" value="{{lastDay}}" class="form-control">
+                  {% else %}
                   <input type="date" id="dateTo" name="dateTo" value="{{balance.dateTo}}" class="form-control">
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -89,7 +98,7 @@ window.onload = function(){
             <button type="button" onclick='previousMonth()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Poprzedni miesiąc</h5></button>
             <button type="button"  onclick='currentYear()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Bieżacy rok</h5></button>
             <button type="button" onclick='previousYear()' class="btn btn-warning mb-1" style="width: 180px;"><h5 class="mt-1">Poprzedni rok</h5></button>
-            <button type="submit" class="btn btn-success btn-block mb-1"><h5 class="mt-1">Pokaż</h5></button>
+            <button type="submit" id="showButton" name="showButton" class="btn btn-success btn-block mb-1"><h5 class="mt-1">Pokaż</h5></button>
 
             </form>
           </div>

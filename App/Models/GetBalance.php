@@ -25,7 +25,7 @@ class GetBalance extends \Core\Model
   public function getIncomes()
   {
     $user = Auth::getUser();
-    $rawData = static::fetchFromDatabaseIncomes($user->id, $this->fromDate, $this->dateTo);
+    $rawData = static::fetchFromDatabaseIncomes($user->id, $this->fromDate, $this->dateTo);    
 
     $data = array();
     foreach ($rawData as $row) {
