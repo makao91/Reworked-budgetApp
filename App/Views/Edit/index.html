@@ -5,18 +5,22 @@
 {% block footer %}
  <script>
 
-
-
 $(document).ready(function(){
 
-  $('.dropdown-menu').on('click', function(event){
-       event.stopPropagation();
-   });
-  $('#showModalNewCat').on('click', function(){
-       $('#addNewCategory').modal('show');
-   });
-   
- $('#showModalEdit').on('click', function(){
+var open = 0;
+
+  $('#dropdownButtonIncome').click(function(){
+    if(open==0){
+      $('#koko').show();
+      open++;
+    }else{
+      $('#koko').hide();
+      open=0;
+    }
+  });
+
+ $('#showModalEdit').click(function(){
+
    if($('input[name=income]:checked').val()){
      $('#modalEdit').modal('show');
     }else{
@@ -103,8 +107,8 @@ $(document).ready(function(){
     <img class="mt-2" src="../img/settings.jpg" alt="balans2" style="width:88%;">
   </div>
   <div class="col-lg-4 text-center marginY">
-    <div class="dropdown keep-inside-clicks-open">
-      <button class="btn btn-primary btn-lg btn-block" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div class="dropdown">
+      <button class="btn btn-primary btn-lg btn-block" type="button" id="dropdownButtonIncome">
         Kategorie przychodów
       </button>
       <div class="dropdown-menu w-100 position-relative py-0" id="koko" aria-labelledby="dropdownMenuButton">
@@ -121,13 +125,13 @@ $(document).ready(function(){
 
           </label>
           <a href="" class="fontelloLink deleteCategory"><i class="icon-trash float-right"></i></a>
-          <a  id="showModalEdit" class="fontelloLink"><i class="icon-pencil float-right"></i></a>
+          <a id="showModalEdit" class="fontelloLink"><i class="icon-pencil float-right"></i></a>
         </div>
         <div class="dropdown-divider my-0 w-100"></div>
 
         {% endfor %}
 
-        <button id="showModalNewCat" type="button" class="btn btn-light btn-block">+ Dodaj nową</button>
+        <button type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#addNewCategory">+ Dodaj nową</button>
       </div>
     </div>
     <div class="dropdown">
