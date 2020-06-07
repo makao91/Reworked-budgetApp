@@ -11,6 +11,7 @@ class Settings extends \Core\Model
   public $expenseName = [];
   public $paymentMethod = [];
 
+
   public function getIncomesName()
   {
     $user = Auth::getUser();
@@ -42,10 +43,10 @@ class Settings extends \Core\Model
   static public function getCategoryNameIncome($id)
   {
     $db = static::getDB();
-    $sql = "SELECT name FROM incomes_category_assigned_to_users WHERE user_id = :user_id ";
+    $sql = "SELECT name FROM incomes_category_assigned_to_users WHERE user_id = :user_id";
     $stmt = $db->prepare($sql);
 
-    $stmt->bindValue(':user_id', $id, PDO::PARAM_STR);
+    $stmt->bindValue(':user_id', $id, PDO::PARAM_INT);
 
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -56,7 +57,7 @@ class Settings extends \Core\Model
     $sql = "SELECT name FROM expenses_category_assigned_to_users WHERE user_id = :user_id ";
     $stmt = $db->prepare($sql);
 
-    $stmt->bindValue(':user_id', $id, PDO::PARAM_STR);
+    $stmt->bindValue(':user_id', $id, PDO::PARAM_INT);
 
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -67,9 +68,38 @@ class Settings extends \Core\Model
     $sql = "SELECT name FROM payment_methods_assigned_to_users WHERE user_id = :user_id ";
     $stmt = $db->prepare($sql);
 
-    $stmt->bindValue(':user_id', $id, PDO::PARAM_STR);
+    $stmt->bindValue(':user_id', $id, PDO::PARAM_INT);
 
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+
+  public function deleteCat($categoryName)
+  {
+    $user = Auth::getUser();
+    $db = static::getDB();
+    $sql = "DELETE FROM incomes_category_assigned_to_users WHERE name = :name AND user_id = :user_id ";
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':user_id', $user->id, PDO::PARAM_INT);
+    $stmt->bindValue(':name', $categoryName, PDO::PARAM_STR);
+
+    $stmt->execute();
+
+  }
+
+
+  public function addCat($categoryName)
+  {
+    $user = Auth::getUser();
+    $db = static::getDB();
+    $sql = "INSERT INTO incomes_category_assigned_to_users(user_id, name) VALUES (:user_id, :name)";
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':user_id', $user->id, PDO::PARAM_INT);
+    $stmt->bindValue(':name', $categoryName, PDO::PARAM_STR);
+
+    $stmt->execute();    
   }
 }

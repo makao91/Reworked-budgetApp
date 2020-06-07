@@ -17,7 +17,7 @@ class Income extends \Core\Model
 
   public static function selectPlugin($selectSearchTerm = false)
   {
-
+    $user = Auth::getUser();
     if(!isset($selectSearchTerm))
       {
         $fetchData = static::getCategorryName();
