@@ -250,3 +250,29 @@ textarea {
 {
 	transform: none !important;
 }
+.icon-trash
+{
+	background-color:#f67e7e;
+	margin-right: 5px;
+	border-radius: 5px;
+	color: #212529;
+}
+.icon-pencil
+{
+	background-color:#f4f669;
+	margin-right: 5px;
+	border-radius: 5px;
+	color: #212529;
+}
+.icon-pencil:hover
+{
+	background-color:#edf10e;
+}
+.icon-trash:hover
+{
+	background-color:#f35858;
+}
+#showModalEdit
+{
+		cursor: pointer;
+}

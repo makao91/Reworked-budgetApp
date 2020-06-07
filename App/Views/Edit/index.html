@@ -2,6 +2,88 @@
 
 {% block title %}Ustawienia{% endblock %}
 
+{% block footer %}
+ <script>
+
+
+
+$(document).ready(function(){
+
+  $('.dropdown-menu').on('click', function(event){
+       event.stopPropagation();
+   });
+  $('#showModalNewCat').on('click', function(){
+       $('#addNewCategory').modal('show');
+   });
+   
+ $('#showModalEdit').on('click', function(){
+   if($('input[name=income]:checked').val()){
+     $('#modalEdit').modal('show');
+    }else{
+      alert("Musisz coś najpierw wybrać.");
+    }
+    });
+
+
+   $('.deleteCategory').click(function(event) {
+     event.preventDefault();
+      var catName = $('input[name=income]:checked').val();
+       if(catName){
+          if (window.confirm("Czy jesteś absolutnie pewnien tego co chcesz uczynić?")) {
+                     $.ajax({
+                          url: "/Edit/deleteCategory",
+                          method: "POST",
+                          data: {catName:catName},
+                          success: function() {
+                          window.location.reload();
+                          }
+                     });
+         }
+       }else{
+         alert("Musisz coś najpierw wybrać.");
+       }
+   });
+   $('#editCategoryButton').click(function(event) {
+     event.preventDefault();
+      var catName = $('input[name=income]:checked').val();
+       if(catName){
+             $.ajax({
+                  url: "/Edit/editCategory",
+                  method: "POST",
+                  data: {catName:catName},
+                  success: function() {
+                  window.location.reload();
+                  }
+             });
+       }else{
+         alert("Musisz coś najpierw wybrać.");
+       }
+   });
+
+   $('#addNewCategoryButton').click(function(event){
+     event.preventDefault();
+    var catName = $('#nameOfNewCategory').val();
+      if(catName !="")
+      {
+             $.ajax({
+              url: "/Edit/addCategory",
+              method: "POST",
+              data: {catName:catName},
+              success: function() {
+                window.location.reload();
+              }
+         });
+      }else{
+        alert("Musisz coś wpisać.");
+      }
+   });
+});
+
+
+</script>
+
+{% endblock %}
+
 {% block body %}
 
 <main>
@@ -21,20 +103,35 @@
     <img class="mt-2" src="../img/settings.jpg" alt="balans2" style="width:88%;">
   </div>
   <div class="col-lg-4 text-center marginY">
-    <div class="dropdown">
-      <button class="btn btn-primary btn-lg btn-block dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div class="dropdown keep-inside-clicks-open">
+      <button class="btn btn-primary btn-lg btn-block" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Kategorie przychodów
       </button>
-      <div class="dropdown-menu w-100 position-relative"" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-menu w-100 position-relative py-0" id="koko" aria-labelledby="dropdownMenuButton">
+        <h6 class="dropdown-header text-center" style="font-weight:bold;">Istniejące kategorie</h6>
+        <div class="dropdown-divider my-0 w-100"></div>
 
         {% for incomeName in editNames.incomeName %}
-          <button class="dropdown-item" type="button">{{incomeName}}</button>
+
+        <div class="form-check ml-2 my-2 ">
+          <label class="mb-0">
+            <input class="form-check-input" type="radio" name="income" value="{{incomeName}}">
+
+              {{incomeName}}
+
+          </label>
+          <a href="" class="fontelloLink deleteCategory"><i class="icon-trash float-right"></i></a>
+          <a  id="showModalEdit" class="fontelloLink"><i class="icon-pencil float-right"></i></a>
+        </div>
+        <div class="dropdown-divider my-0 w-100"></div>
+
         {% endfor %}
 
+        <button id="showModalNewCat" type="button" class="btn btn-light btn-block">+ Dodaj nową</button>
       </div>
     </div>
     <div class="dropdown">
-      <button class="btn btn-danger btn-lg btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-danger btn-lg btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Kategorie wydatków
       </button>
       <div class="dropdown-menu w-100 position-relative" aria-labelledby="dropdownMenuButton">
@@ -46,7 +143,7 @@
       </div>
     </div>
     <div class="dropdown">
-      <button class="btn btn-success btn-lg btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-success btn-lg btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Sposoby płatności
       </button>
       <div class="dropdown-menu w-100 position-relative" aria-labelledby="dropdownMenuButton">
@@ -54,11 +151,11 @@
         {% for paymentMethod in editNames.paymentMethod %}
           <button class="dropdown-item" type="button">{{paymentMethod}}</button>
         {% endfor %}
-                
+
       </div>
     </div>
     <div class="dropdown">
-      <button class="btn btn-warning btn-lg btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-warning btn-lg btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Użytkownik
       </button>
       <div class="dropdown-menu w-100 position-relative" aria-labelledby="dropdownMenuButton">
@@ -67,11 +164,53 @@
         <button class="dropdown-item" type="button">Something else here</button>
       </div>
     </div>
-
   </div>
   <div class="col-lg-4 marginY">
     <img class="mt-2" src="../img/settings.jpg" alt="balans2" style="width:88%;">
   </div>
 </div>
 </main>
+
+
+<div class="modal fade" id="addNewCategory" tabindex="-1" role="dialog" aria-labelledby="addNewCategory" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Wpisz nazwę nowej kategorii</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-left">
+        <input type="text" id="nameOfNewCategory" placeholder="np. pluszowe misie">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+        <button type="button" id="addNewCategoryButton" class="btn btn-primary">Dodaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="addNewCategory" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Wpisz nazwę nowej kategorii</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-left">
+        <input type="text" id="nameOfNewCategory" placeholder="np. pluszowe misie">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+        <button type="button" id="addNewCategoryButton" class="btn btn-primary">Dodaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

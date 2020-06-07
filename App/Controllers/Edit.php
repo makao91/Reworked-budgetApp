@@ -22,11 +22,24 @@ class Edit extends Authenticated
        $this->data->getIncomesName();
        $this->data->getExpensesName();
        $this->data->getPaymentMethods();
-
-
       View::renderTemplate('Edit/index.html', [
         'editNames' => $this->data,
       ]);
+    }
+
+
+    public function deleteCategory()
+    {
+      $this->data = new Settings();
+      $this->data->deleteCat($_POST['catName']);
+    }
+
+
+
+    public function addCategory()
+    {      
+      $this->data = new Settings();
+      $this->data->addCat($_POST['catName']);
     }
 
 }
