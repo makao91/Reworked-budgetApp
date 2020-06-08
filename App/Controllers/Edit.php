@@ -20,7 +20,7 @@ class Edit extends Authenticated
      {
        $this->data = new Settings();
        $this->data->getIncomesName();
-       $this->data->getExpensesName();
+       $this->data->getExpensesNameWithLimit();
        $this->data->getPaymentMethods();
       View::renderTemplate('Edit/index.html', [
         'editNames' => $this->data,
@@ -28,18 +28,58 @@ class Edit extends Authenticated
     }
 
 
-    public function deleteCategory()
+    public function deleteCategoryIncome()
     {
       $this->data = new Settings();
-      $this->data->deleteCat($_POST['catName']);
+      $this->data->deleteCatIn($_POST['catName']);
+    }
+    public function deleteCategoryPayment()
+    {
+      $this->data = new Settings();
+      $this->data->deleteCatPay($_POST['catName']);
+    }
+    public function deleteCategoryExpense()
+    {
+      $this->data = new Settings();
+      $this->data->deleteCatEx($_POST['catName']);
     }
 
-
-
-    public function addCategory()
-    {      
+    public function addCategoryIncome()
+    {
       $this->data = new Settings();
-      $this->data->addCat($_POST['catName']);
+      $this->data->addCatIn($_POST['catName']);
+    }
+    public function addCategoryPayment()
+    {
+      $this->data = new Settings();
+      $this->data->addCatPay($_POST['catName']);
+    }
+    public function addCategoryExpense()
+    {
+      $this->data = new Settings();
+      $this->data->addCatEx($_POST['catName']);
+    }
+
+    public function editCategoryIncome()
+    {
+      $this->data = new Settings();
+      $this->data->editCatIn($_POST);
+    }
+    public function editCategoryPayment()
+    {
+      $this->data = new Settings();
+      $this->data->editCatPay($_POST);
+    }
+    public function editCategoryExpense()
+    {
+      $this->data = new Settings();
+      var_dump($_POST);
+      $this->data->editCatEx($_POST);
+    }
+    public function getLimit()
+    {
+      $this->data = new Settings();
+       echo $this->data->getLi($_POST);
     }
 
 }

@@ -7,35 +7,109 @@
 
 $(document).ready(function(){
 
-var open = 0;
+var openIncome = 0;
+var openExpense = 0;
+var openPayment = 0;
 
   $('#dropdownButtonIncome').click(function(){
-    if(open==0){
-      $('#koko').show();
-      open++;
+    if(openIncome==0){
+      $('#dropdownIncome').show();
+      openIncome++;
     }else{
-      $('#koko').hide();
-      open=0;
+      $('#dropdownIncome').hide();
+      openIncome=0;
     }
   });
 
- $('#showModalEdit').click(function(){
+  $('#dropdownButtonExpense').click(function(){
+    if(openExpense==0){
+      $('#dropdownExpense').show();
+      openExpense++;
+    }else{
+      $('#dropdownExpense').hide();
+      openExpense=0;
+    }
+  });
 
-   if($('input[name=income]:checked').val()){
-     $('#modalEdit').modal('show');
+
+  $('#dropdownButtonPayment').click(function(){
+    if(openPayment==0){
+      $('#dropdownPayment').show();
+      openPayment++;
+    }else{
+      $('#dropdownPayment').hide();
+      openPayment=0;
+    }
+  });
+
+
+  $('.limitCheckbox:checkbox').change(
+      function(){
+          if ($(this).is(':checked')) {
+              $('.limitMoney').prop("disabled", false);
+          }else {
+            $('.limitMoney').prop("disabled", true);
+          }
+      });
+
+
+
+ $('.showModalEditExpense').click(function(){
+   if($('input[name=expense]:checked').val()){
+
+     var fullname = $('input[name=expense]:checked').val();
+     var shortname = "";
+     if(fullname.indexOf("-") !=-1)
+     {
+       var pos = fullname.indexOf("-");
+       shortname = fullname.slice(0, (pos-1));
+     }else{
+       shortname = fullname;
+     }
+     $.ajax({
+          url: "/Edit/getLimit",
+          method: "POST",
+          data: {shortname:shortname},
+          success: function(data) {
+             $('#limitValue').val(data);
+          }
+     });
+
+     document.getElementById("nameOfEditCategoryExpense").value = shortname;
+     $('#modalEditExpense').modal('show');
     }else{
       alert("Musisz coś najpierw wybrać.");
     }
-    });
+
+});
+
+ $('.showModalEditIncome').click(function(){
+   if($('input[name=income]:checked').val()){
+     document.getElementById("nameOfEditCategoryIncome").value = $('input[name=income]:checked').val();
+     $('#modalEditIncome').modal('show');
+    }else{
+      alert("Musisz coś najpierw wybrać.");
+    }
+});
 
 
-   $('.deleteCategory').click(function(event) {
+ $('.showModalEditPayment').click(function(){
+   if($('input[name=payment]:checked').val()){
+     document.getElementById("nameOfEditCategoryPayment").value = $('input[name=payment]:checked').val();
+     $('#modalEditPayment').modal('show');
+    }else{
+      alert("Musisz coś najpierw wybrać.");
+    }
+});
+
+
+   $('.deleteCategoryIncome').click(function(event) {
      event.preventDefault();
       var catName = $('input[name=income]:checked').val();
        if(catName){
           if (window.confirm("Czy jesteś absolutnie pewnien tego co chcesz uczynić?")) {
                      $.ajax({
-                          url: "/Edit/deleteCategory",
+                          url: "/Edit/deleteCategoryIncome",
                           method: "POST",
                           data: {catName:catName},
                           success: function() {
@@ -47,30 +121,152 @@ var open = 0;
          alert("Musisz coś najpierw wybrać.");
        }
    });
-   $('#editCategoryButton').click(function(event) {
+
+
+   $('.deleteCategoryPayment').click(function(event) {
      event.preventDefault();
-      var catName = $('input[name=income]:checked').val();
+      var catName = $('input[name=payment]:checked').val();
        if(catName){
-             $.ajax({
-                  url: "/Edit/editCategory",
-                  method: "POST",
-                  data: {catName:catName},
-                  success: function() {
-                  window.location.reload();
-                  }
-             });
+          if (window.confirm("Czy jesteś absolutnie pewnien tego co chcesz uczynić?")) {
+                     $.ajax({
+                          url: "/Edit/deleteCategoryPayment",
+                          method: "POST",
+                          data: {catName:catName},
+                          success: function() {
+                          window.location.reload();
+                          }
+                     });
+         }
        }else{
          alert("Musisz coś najpierw wybrać.");
        }
    });
 
-   $('#addNewCategoryButton').click(function(event){
+   $('.deleteCategoryExpense').click(function(event) {
      event.preventDefault();
-    var catName = $('#nameOfNewCategory').val();
+
+       var fullname = $('input[name=expense]:checked').val();
+       if(fullname.indexOf("-") !=-1)
+       {
+         var pos = fullname.indexOf("-");
+         var catName = fullname.slice(0, (pos-1));
+       }else{
+         catName = fullname;
+       }
+
+       if(catName){
+          if (window.confirm("Czy jesteś absolutnie pewnien tego co chcesz uczynić?")) {
+                     $.ajax({
+                          url: "/Edit/deleteCategoryExpense",
+                          method: "POST",
+                          data: {catName:catName},
+                          success: function() {
+                          window.location.reload();
+                          }
+                     });
+         }
+       }else{
+         alert("Musisz coś najpierw wybrać.");
+       }
+   });
+
+   $('#editCategoryButtonIncome').click(function(event) {
+     event.preventDefault();
+      var catName = $('#nameOfEditCategoryIncome').val();
+      var oldCatName = $('input[name=income]:checked').val();
+             $.ajax({
+                  url: "/Edit/editCategoryIncome",
+                  method: "POST",
+                  data: {catName:catName, oldCatName:oldCatName},
+                  success: function() {
+                  window.location.reload();
+                  }
+             });
+
+   });
+   $('#editCategoryButtonPayment').click(function(event) {
+     event.preventDefault();
+      var catName = $('#nameOfEditCategoryPayment').val();
+      var oldCatName = $('input[name=payment]:checked').val();
+             $.ajax({
+                  url: "/Edit/editCategoryPayment",
+                  method: "POST",
+                  data: {catName:catName, oldCatName:oldCatName},
+                  success: function() {
+                  window.location.reload();
+                  }
+             });
+
+   });
+   $('#editCategoryButtonExpense').click(function(event) {
+     event.preventDefault();
+
+     var fullname = $('input[name=expense]:checked').val();
+     var shortname = "";
+     if(fullname.indexOf("-") !=-1)
+     {
+       var pos = fullname.indexOf("-");
+       shortname = fullname.slice(0, (pos-1));
+     }else{
+       shortname = fullname;
+     }
+
+      var catName = $('#nameOfEditCategoryExpense').val();
+      var oldCatName = shortname
+      var limit = $('#limitValue').val();
+
+             $.ajax({
+                  url: "/Edit/editCategoryExpense",
+                  method: "POST",
+                  data: {catName:catName, oldCatName:oldCatName, limit:limit},
+                  success: function() {
+                  window.location.reload();
+                  }
+             });
+
+   });
+
+   $('#addNewCategoryButtonIncome').click(function(event){
+     event.preventDefault();
+    var catName = $('#nameOfNewCategoryIncome').val();
       if(catName !="")
       {
              $.ajax({
-              url: "/Edit/addCategory",
+              url: "/Edit/addCategoryIncome",
+              method: "POST",
+              data: {catName:catName},
+              success: function() {
+                window.location.reload();
+              }
+         });
+      }else{
+        alert("Musisz coś wpisać.");
+      }
+   });
+   $('#addNewCategoryButtonPayment').click(function(event){
+     event.preventDefault();
+    var catName = $('#nameOfNewCategoryPayment').val();
+      if(catName !="")
+      {
+             $.ajax({
+              url: "/Edit/addCategoryPayment",
+              method: "POST",
+              data: {catName:catName},
+              success: function() {
+                window.location.reload();
+              }
+         });
+      }else{
+        alert("Musisz coś wpisać.");
+      }
+   });
+   $('#addNewCategoryButtonExpense').click(function(event){
+     event.preventDefault();
+    var catName = $('#nameOfNewCategoryExpense').val();
+      if(catName !="")
+      {
+             $.ajax({
+              url: "/Edit/addCategoryExpense",
               method: "POST",
               data: {catName:catName},
               success: function() {
@@ -91,8 +287,7 @@ var open = 0;
 {% block body %}
 
 <main>
-  <!--
-  <nav>
+<!--  <nav>
     <a href="/menu/index"><button type="button" class="btn btn-lg btn-warning btn-warning-inverse sticky">Powrót do menu głównego</button></a>
   </nav>-->
 <header>
@@ -111,51 +306,82 @@ var open = 0;
       <button class="btn btn-primary btn-lg btn-block" type="button" id="dropdownButtonIncome">
         Kategorie przychodów
       </button>
-      <div class="dropdown-menu w-100 position-relative py-0" id="koko" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-menu w-100 position-relative py-0" id="dropdownIncome" aria-labelledby="dropdownMenuButton">
         <h6 class="dropdown-header text-center" style="font-weight:bold;">Istniejące kategorie</h6>
         <div class="dropdown-divider my-0 w-100"></div>
 
         {% for incomeName in editNames.incomeName %}
 
         <div class="form-check ml-2 my-2 ">
-          <label class="mb-0">
+          <label class="mb-0 w-100">
             <input class="form-check-input" type="radio" name="income" value="{{incomeName}}">
 
               {{incomeName}}
 
+          <a href="" class="fontelloLink deleteCategoryIncome"><i class="icon-trash float-right"></i></a>
+          <a class="fontelloLink showModalEditIncome"><i class="icon-pencil float-right"></i></a>
           </label>
-          <a href="" class="fontelloLink deleteCategory"><i class="icon-trash float-right"></i></a>
-          <a id="showModalEdit" class="fontelloLink"><i class="icon-pencil float-right"></i></a>
         </div>
         <div class="dropdown-divider my-0 w-100"></div>
 
         {% endfor %}
 
-        <button type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#addNewCategory">+ Dodaj nową</button>
+        <button type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#addNewCategoryIncome">+ Dodaj nową</button>
       </div>
     </div>
     <div class="dropdown">
-      <button class="btn btn-danger btn-lg btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-danger btn-lg btn-block" type="button" id="dropdownButtonExpense">
         Kategorie wydatków
       </button>
-      <div class="dropdown-menu w-100 position-relative" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-menu w-100 position-relative py-0" id="dropdownExpense" aria-labelledby="dropdownMenuButton">
+        <h6 class="dropdown-header text-center" style="font-weight:bold;">Istniejące kategorie</h6>
+        <div class="dropdown-divider my-0 w-100"></div>
 
-        {% for expenseName in editNames.expenseName %}
-          <button class="dropdown-item" type="button">{{expenseName}}</button>
+        {% for expenseNameWithLimit in editNames.expenseNameWithLimit %}
+
+        <div class="form-check ml-2 my-2 ">
+          <label class="mb-0 w-100">
+            <input class="form-check-input" type="radio" name="expense" id="shortNameExpense" value="{{expenseNameWithLimit}}">
+
+            {{expenseNameWithLimit}}
+
+            <a href="" class="fontelloLink deleteCategoryExpense"><i class="icon-trash float-right"></i></a>
+            <a class="fontelloLink showModalEditExpense" ><i class="icon-pencil float-right"></i></a>
+            </label>
+          </div>
+          <div hidden>
+            <p id="existingLimit"></p>
+          </div>
+          <div class="dropdown-divider my-0 w-100"></div>
+
         {% endfor %}
 
+        <button type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#addNewCategoryExpense">+ Dodaj nową</button>
       </div>
     </div>
     <div class="dropdown">
-      <button class="btn btn-success btn-lg btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-success btn-lg btn-block" type="button" id="dropdownButtonPayment">
         Sposoby płatności
       </button>
-      <div class="dropdown-menu w-100 position-relative" aria-labelledby="dropdownMenuButton">
+      <div class="dropdown-menu w-100 position-relative py-0" id="dropdownPayment" aria-labelledby="dropdownMenuButton">
+        <h6 class="dropdown-header text-center" style="font-weight:bold;">Aktualne metody płatności</h6>
+        <div class="dropdown-divider my-0 w-100"></div>
 
         {% for paymentMethod in editNames.paymentMethod %}
-          <button class="dropdown-item" type="button">{{paymentMethod}}</button>
+        <div class="form-check ml-2 my-2 ">
+          <label class="mb-0 w-100">
+            <input class="form-check-input" type="radio" name="payment" value="{{paymentMethod}}">
+
+          {{paymentMethod}}
+
+          <a href="" class="fontelloLink deleteCategoryPayment"><i class="icon-trash float-right"></i></a>
+          <a class="fontelloLink showModalEditPayment"><i class="icon-pencil float-right"></i></a>
+          </label>
+        </div>
+        <div class="dropdown-divider my-0 w-100"></div>
         {% endfor %}
 
+        <button type="button" class="btn btn-light btn-block" data-toggle="modal" data-target="#addNewCategoryPayment">+ Dodaj nową</button>
       </div>
     </div>
     <div class="dropdown">
@@ -176,45 +402,136 @@ var open = 0;
 </main>
 
 
-<div class="modal fade" id="addNewCategory" tabindex="-1" role="dialog" aria-labelledby="addNewCategory" aria-hidden="true">
+<div class="modal fade" id="addNewCategoryIncome" tabindex="-1" role="dialog" aria-labelledby="addNewCategory" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Wpisz nazwę nowej kategorii</h5>
+        <h5 class="modal-title">Wpisz nazwę nowej kategorii</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body text-left">
-        <input type="text" id="nameOfNewCategory" placeholder="np. pluszowe misie">
+        <input type="text" id="nameOfNewCategoryIncome" placeholder="np. hipoteka">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-        <button type="button" id="addNewCategoryButton" class="btn btn-primary">Dodaj</button>
+        <button type="button" id="addNewCategoryButtonIncome" class="btn btn-primary">Dodaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addNewCategoryPayment" tabindex="-1" role="dialog" aria-labelledby="addNewCategory" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Wpisz nazwę nowej metody płatności</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-left">
+        <input type="text" id="nameOfNewCategoryPayment" placeholder="np. dary natury">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+        <button type="button" id="addNewCategoryButtonPayment" class="btn btn-primary">Dodaj</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addNewCategoryExpense" tabindex="-1" role="dialog" aria-labelledby="addNewCategory" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Wpisz nazwę nowej kategorii</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-left">
+        <input type="text" id="nameOfNewCategoryExpense" placeholder="np. pluszowe misie">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+        <button type="button" id="addNewCategoryButtonExpense" class="btn btn-primary">Dodaj</button>
       </div>
     </div>
   </div>
 </div>
 
 
-<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="addNewCategory" aria-hidden="true">
+<div class="modal fade" id="modalEditExpense" tabindex="-1" role="dialog" aria-labelledby="editNewCategory" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Wpisz nazwę nowej kategorii</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Edytuj kategorię</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body text-left">
-        <input type="text" id="nameOfNewCategory" placeholder="np. pluszowe misie">
+        <label for="nameOfEditCategoryExpense">Nazwa kategorii</label>
+        <input type="text" id="nameOfEditCategoryExpense" autofocus>
+        <div class="form-check">
+          <label class="form-check-label" for="limit">
+            <input type="checkbox" id="limit" class="form-check-input limitCheckbox">
+            Ustaw limit
+          </label>
+        </div>
+        <input type="number" class="limitMoney" id="limitValue" disabled>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-        <button type="button" id="addNewCategoryButton" class="btn btn-primary">Dodaj</button>
+        <button type="button" id="editCategoryButtonExpense" class="btn btn-primary">Zmień</button>
       </div>
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="modalEditIncome" tabindex="-1" role="dialog" aria-labelledby="editNewCategory" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edytuj kategorię</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-left">
+        <label for="nameOfEditCategoryIncome">Nazwa kategorii</label>
+        <input type="text" id="nameOfEditCategoryIncome" autofocus>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+        <button type="button" id="editCategoryButtonIncome" class="btn btn-primary">Zmień</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalEditPayment" tabindex="-1" role="dialog" aria-labelledby="editNewCategory" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edytuj kategorię</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-left">
+        <label for="nameOfEditCategoryPayment">Nazwa kategorii</label>
+        <input type="text" id="nameOfEditCategoryPayment" autofocus>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+        <button type="button" id="editCategoryButtonPayment" class="btn btn-primary">Zmień</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}
