@@ -276,3 +276,7 @@ textarea {
 {
 		cursor: pointer;
 }
+.dropdown-divider
+{
+ 	border-top: 1px solid #635b5b;
+}

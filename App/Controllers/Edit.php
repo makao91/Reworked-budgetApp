@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\Settings;
+use App\Auth;
 
 
 
@@ -15,6 +16,7 @@ use \App\Models\Settings;
 class Edit extends Authenticated
 {
     private $data;
+    private $user;
 
     public function showAction()
      {
@@ -22,8 +24,10 @@ class Edit extends Authenticated
        $this->data->getIncomesName();
        $this->data->getExpensesNameWithLimit();
        $this->data->getPaymentMethods();
+       $user = Auth::getUser();
       View::renderTemplate('Edit/index.html', [
         'editNames' => $this->data,
+        'user' => $user,
       ]);
     }
 
@@ -73,13 +77,27 @@ class Edit extends Authenticated
     public function editCategoryExpense()
     {
       $this->data = new Settings();
-      var_dump($_POST);
       $this->data->editCatEx($_POST);
     }
     public function getLimit()
     {
       $this->data = new Settings();
        echo $this->data->getLi($_POST);
+    }
+    public function passwordAction()
+    {
+      $this->data = new Settings();
+       $this->data->editPassword($_POST);
+    }
+    public function nameAction()
+    {
+      $this->data = new Settings();
+       $this->data->editName($_POST);
+    }
+    public function emailAction()
+    {
+      $this->data = new Settings();
+       $this->data->editEmail($_POST);
     }
 
 }

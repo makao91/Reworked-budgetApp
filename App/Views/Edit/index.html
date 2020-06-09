@@ -3,6 +3,8 @@
 {% block title %}Ustawienia{% endblock %}
 
 {% block footer %}
+<script src="/js/hideShowPassword.min.js"></script>
+<script src="/js/app.js"></script>
  <script>
 
 $(document).ready(function(){
@@ -10,6 +12,7 @@ $(document).ready(function(){
 var openIncome = 0;
 var openExpense = 0;
 var openPayment = 0;
+var openUser = 0;
 
   $('#dropdownButtonIncome').click(function(){
     if(openIncome==0){
@@ -43,6 +46,17 @@ var openPayment = 0;
   });
 
 
+  $('#dropdownButtonUser').click(function(){
+    if(openUser==0){
+      $('#dropdownUser').show();
+      openUser++;
+    }else{
+      $('#dropdownUser').hide();
+      openUser=0;
+    }
+  });
+
+
   $('.limitCheckbox:checkbox').change(
       function(){
           if ($(this).is(':checked')) {
@@ -59,10 +73,10 @@ var openPayment = 0;
 
      var fullname = $('input[name=expense]:checked').val();
      var shortname = "";
-     if(fullname.indexOf("-") !=-1)
+     if(fullname.indexOf("<") !=-1)
      {
-       var pos = fullname.indexOf("-");
-       shortname = fullname.slice(0, (pos-1));
+       var pos = fullname.indexOf("<");
+       shortname = fullname.slice(0, pos);
      }else{
        shortname = fullname;
      }
@@ -101,6 +115,60 @@ var openPayment = 0;
       alert("Musisz coś najpierw wybrać.");
     }
 });
+
+
+   $('#changePass').click(function(event) {
+     event.preventDefault();
+      var newPass = $('#userPassowrd').val();
+
+           $.ajax({
+                url: "/Edit/password",
+                method: "POST",
+                data: {newPass:newPass},
+                success: function() {
+                document.getElementById("userPassowrd").value = null;
+                alert("Hało zostało zmienione.")
+                }
+           });
+   });
+
+
+   $('#changeName').click(function(event) {
+     event.preventDefault();
+      var newName = $('#userName').val();
+        if(newName != ""){
+          $.ajax({
+                url: "/Edit/name",
+                method: "POST",
+                data: {newName:newName},
+                success: function() {
+                document.getElementById("userName").value = newName;
+                alert("Pomyślnie zmieniono imię.")
+                }
+           });
+        }else{
+          alert("Muisz wpisać choć jedną literę.")
+        }
+   });
+
+
+   $('#changeEmail').click(function(event) {
+     event.preventDefault();
+      var newEmail = $('#userEmail').val();
+        if(newEmail != ""){
+          $.ajax({
+                url: "/Edit/email",
+                method: "POST",
+                data: {newEmail:newEmail},
+                success: function() {
+                document.getElementById("userEmail").value = newEmail;
+                alert("Pomyślnie zmieniono nazwę użytkownika.")
+                }
+           });
+        }else{
+          alert("Muisz wpisać choć jedną literę.")
+        }
+   });
 
 
    $('.deleteCategoryIncome').click(function(event) {
@@ -146,9 +214,9 @@ var openPayment = 0;
      event.preventDefault();
 
        var fullname = $('input[name=expense]:checked').val();
-       if(fullname.indexOf("-") !=-1)
+       if(fullname.indexOf("<") !=-1)
        {
-         var pos = fullname.indexOf("-");
+         var pos = fullname.indexOf("<");
          var catName = fullname.slice(0, (pos-1));
        }else{
          catName = fullname;
@@ -203,10 +271,10 @@ var openPayment = 0;
 
      var fullname = $('input[name=expense]:checked').val();
      var shortname = "";
-     if(fullname.indexOf("-") !=-1)
+     if(fullname.indexOf("<") !=-1)
      {
-       var pos = fullname.indexOf("-");
-       shortname = fullname.slice(0, (pos-1));
+       var pos = fullname.indexOf("<");
+       shortname = fullname.slice(0, pos);
      }else{
        shortname = fullname;
      }
@@ -277,6 +345,48 @@ var openPayment = 0;
         alert("Musisz coś wpisać.");
       }
    });
+
+
+   $('#userPassowrd').hideShowPassword({
+     show: false,
+     innerToggle: focus,
+     toggle: {
+       element: '<button type="button" class="btn btn-light">',
+       verticalAlign: 'top'
+     },
+     states: {
+       shown: {
+         toggle: {
+           className: 'hideShowPassword-toggle-hide',
+           content: 'Ukryj',
+         }
+       },
+       hidden: {
+         toggle: {
+           className: 'hideShowPassword-toggle-show',
+           content: 'Pokaż',
+         }
+       }
+     }
+   });
+
+   $('#passwordForm').validate({
+     rules: {
+       password: {
+         required: true,
+         minlength: 6,
+         validPassword: true
+       }
+     },
+     messages:{
+       password: {
+         required: 'Hasło jest wymagane.',
+         minlength: 'Musi zawierać conajmniej 6 znaków.'
+       }
+     }
+   });
+
+
 });
 
 
@@ -339,14 +449,15 @@ var openPayment = 0;
 
         {% for expenseNameWithLimit in editNames.expenseNameWithLimit %}
 
-        <div class="form-check ml-2 my-2 ">
-          <label class="mb-0 w-100">
+        <div class="form-check ml-2 my-2">
+          <label class="w-100 marginY">
             <input class="form-check-input" type="radio" name="expense" id="shortNameExpense" value="{{expenseNameWithLimit}}">
 
-            {{expenseNameWithLimit}}
+          {% set dataWithHtml = expenseNameWithLimit %}
+            {{dataWithHtml|raw}}
 
             <a href="" class="fontelloLink deleteCategoryExpense"><i class="icon-trash float-right"></i></a>
-            <a class="fontelloLink showModalEditExpense" ><i class="icon-pencil float-right"></i></a>
+            <a class="fontelloLink showModalEditExpense"><i class="icon-pencil float-right"></i></a>
             </label>
           </div>
           <div hidden>
@@ -385,14 +496,37 @@ var openPayment = 0;
       </div>
     </div>
     <div class="dropdown">
-      <button class="btn btn-warning btn-lg btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-warning btn-lg btn-block" type="button" id="dropdownButtonUser">
         Użytkownik
       </button>
-      <div class="dropdown-menu w-100 position-relative" aria-labelledby="dropdownMenuButton">
-        <button class="dropdown-item" type="button">Action</button>
-        <button class="dropdown-item" type="button">Another action</button>
-        <button class="dropdown-item" type="button">Something else here</button>
-      </div>
+      <div class="dropdown-menu w-100 position-relative py-0" id="dropdownUser" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-divider my-0 w-100"></div>
+
+        {% if user is not empty %}
+        <form>
+          <div class="input-group ml-2 my-2">
+            <input class="form-control" type="text" value="{{user.name}}" id="userName">
+            <button class="btn btn-secondary mr-3" type="button" id="changeName">Zmień imię</button>
+          </div>
+        </form>
+        <div class="dropdown-divider my-1 w-100"></div>
+        <form>
+          <label style="font-size: 14px;" class="mb-0 ml-2" for="#emailName">Zmień na dowolną nazwę. Służyć będzie za nazwę użytkownika podczas logowania.</label>
+          <div class="input-group ml-2 mb-2">
+              <input class="form-control" type="text" id="userEmail" value="{{user.email}}">
+              <button class="btn btn-secondary mr-3" type="button" id="changeEmail">Zmień nazwę</button>
+          </div>
+        </form>
+        <div class="dropdown-divider my-1 w-100"></div>
+        <form id="passwordForm">
+          <div class="m-2">
+            <input class="form-control" type="password" id="userPassowrd" name="password" placeholder="tu wpisz nowe hasło">
+            <button class="btn btn-secondary btn-block" type="button" id="changePass">Zmień hasło</button>
+          </div>
+        </form>
+
+        {% endif %}
+        </div>
     </div>
   </div>
   <div class="col-lg-4 marginY">
