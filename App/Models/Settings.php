@@ -14,6 +14,7 @@ class Settings extends \Core\Model
   public $paymentMethod = [];
 
 
+
   public function getIncomesName()
   {
     $user = Auth::getUser();
@@ -23,6 +24,7 @@ class Settings extends \Core\Model
         $this->incomeName[] = $row['name'];
     };
   }
+
   public function getExpensesNameWithLimit()
   {
     $user = Auth::getUser();
@@ -32,11 +34,10 @@ class Settings extends \Core\Model
       $this->expenseName[] = $row['name'];
       $this->expenseLimit[] = $row['paymentlimit'];
         if($row['paymentlimit']){
-          $this->expenseNameWithLimit[] = $row['name'].'<br>'.'Limit: '. $row['paymentlimit'].' zł';
+          $this->expenseNameWithLimit[] = $row['name'].'<span class="limit"> Limit: '. $row['paymentlimit'].' zł</span>';
         }else{
           $this->expenseNameWithLimit[] = $row['name'];
         }
-
     };
   }
 
@@ -147,14 +148,22 @@ class Settings extends \Core\Model
 
     $stmt->execute();
   }
-  public function addCatEx($categoryName)
+  public function addCatEx($categoryData)
   {
+    $categoryName = $categoryData['catName'];
+    $categoryLimit = $categoryData['catLimit'];
+
+    if($categoryLimit == 0){
+      $categoryLimit = null;
+    }
+
     $user = Auth::getUser();
     $db = static::getDB();
-    $sql = "INSERT INTO expenses_category_assigned_to_users(user_id, name) VALUES (:user_id, :name)";
+    $sql = "INSERT INTO expenses_category_assigned_to_users(user_id, name, paymentlimit) VALUES (:user_id, :name, :paymenylimit)";
     $stmt = $db->prepare($sql);
 
     $stmt->bindValue(':user_id', $user->id, PDO::PARAM_INT);
+    $stmt->bindValue(':paymenylimit', $categoryLimit, PDO::PARAM_INT);
     $stmt->bindValue(':name', $categoryName, PDO::PARAM_STR);
 
     $stmt->execute();
@@ -233,37 +242,41 @@ class Settings extends \Core\Model
 
     $stmt->execute();
   }
+
+
   public function editName($editData)
   {
     $newName = $editData['newName'];
+      $user = Auth::getUser();
+      $db = static::getDB();
+      $sql = "UPDATE users SET name = :name WHERE id = :id";
+      $stmt = $db->prepare($sql);
 
-    $user = Auth::getUser();
-    $db = static::getDB();
-    $sql = "UPDATE users SET name = :name WHERE id = :id";
-    $stmt = $db->prepare($sql);
+      $stmt->bindValue(':id', $user->id, PDO::PARAM_INT);
+      $stmt->bindValue(':name', $newName, PDO::PARAM_STR);
 
-    $stmt->bindValue(':id', $user->id, PDO::PARAM_INT);
-    $stmt->bindValue(':name', $newName, PDO::PARAM_STR);
-
-    $stmt->execute();
+      $stmt->execute();
   }
+
+
   public function editEmail($editData)
   {
     $newEmail = $editData['newEmail'];
 
-    $user = Auth::getUser();
-    $db = static::getDB();
-    $sql = "UPDATE users SET email = :email WHERE id = :id";
-    $stmt = $db->prepare($sql);
+        $user = Auth::getUser();
+        $db = static::getDB();
+        $sql = "UPDATE users SET email = :email WHERE id = :id";
+        $stmt = $db->prepare($sql);
 
-    $stmt->bindValue(':id', $user->id, PDO::PARAM_INT);
-    $stmt->bindValue(':email', $newEmail, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $user->id, PDO::PARAM_INT);
+        $stmt->bindValue(':email', $newEmail, PDO::PARAM_STR);
 
-    $stmt->execute();
+        $stmt->execute();
   }
+
+
   public function editCatEx($editData)
   {
-
     $newCatName = $editData['catName'];
     $oldCatName = $editData['oldCatName'];
     $limitPay = $editData['limit'];
@@ -284,4 +297,6 @@ class Settings extends \Core\Model
 
     $stmt->execute();
   }
+
+
 }

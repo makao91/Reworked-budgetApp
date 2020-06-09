@@ -264,8 +264,8 @@ var openUser = 0;
                   window.location.reload();
                   }
              });
-
    });
+
    $('#editCategoryButtonExpense').click(function(event) {
      event.preventDefault();
 
@@ -331,12 +331,13 @@ var openUser = 0;
    $('#addNewCategoryButtonExpense').click(function(event){
      event.preventDefault();
     var catName = $('#nameOfNewCategoryExpense').val();
+    var catLimit = $('#addLimitValue').val();
       if(catName !="")
       {
              $.ajax({
               url: "/Edit/addCategoryExpense",
               method: "POST",
-              data: {catName:catName},
+              data: {catName:catName, catLimit:catLimit},
               success: function() {
                 window.location.reload();
               }
@@ -386,7 +387,22 @@ var openUser = 0;
      }
    });
 
-
+   $('#emailForm').validate({
+     rules: {
+       email: {
+         required: true,
+         email: true,
+         remote: '/account/validateEmail'
+       }
+     },
+     messages:{
+       email: {
+         email: 'Wprowadź poprawny adres email. Przykład: moje@subaru.pl',
+         remote: 'Uzytkownik o tym adresie email już istnieje. Wprowadź inny.',
+         required: 'Email jest wymagany.'
+       }
+     }
+   });
 });
 
 
@@ -397,9 +413,9 @@ var openUser = 0;
 {% block body %}
 
 <main>
-<!--  <nav>
+  <nav>
     <a href="/menu/index"><button type="button" class="btn btn-lg btn-warning btn-warning-inverse sticky">Powrót do menu głównego</button></a>
-  </nav>-->
+  </nav>
 <header>
   <div class="row mt-1">
     <div class="col-lg-12 text-center marginY">
@@ -408,7 +424,7 @@ var openUser = 0;
   </div>
 </header>
 <div class="row">
-  <div class="col-lg-4 marginY">
+  <div class="col-lg-4">
     <img class="mt-2" src="../img/settings.jpg" alt="balans2" style="width:88%;">
   </div>
   <div class="col-lg-4 text-center marginY">
@@ -479,6 +495,7 @@ var openUser = 0;
         <div class="dropdown-divider my-0 w-100"></div>
 
         {% for paymentMethod in editNames.paymentMethod %}
+
         <div class="form-check ml-2 my-2 ">
           <label class="mb-0 w-100">
             <input class="form-check-input" type="radio" name="payment" value="{{paymentMethod}}">
@@ -500,24 +517,26 @@ var openUser = 0;
         Użytkownik
       </button>
       <div class="dropdown-menu w-100 position-relative py-0" id="dropdownUser" aria-labelledby="dropdownMenuButton">
-        <div class="dropdown-divider my-0 w-100"></div>
+
 
         {% if user is not empty %}
         <form>
+          <h6 class="dropdown-header text-center" style="font-weight:bold;">Aktualne imię</h6>
           <div class="input-group ml-2 my-2">
             <input class="form-control" type="text" value="{{user.name}}" id="userName">
             <button class="btn btn-secondary mr-3" type="button" id="changeName">Zmień imię</button>
           </div>
         </form>
         <div class="dropdown-divider my-1 w-100"></div>
-        <form>
-          <label style="font-size: 14px;" class="mb-0 ml-2" for="#emailName">Zmień na dowolną nazwę. Służyć będzie za nazwę użytkownika podczas logowania.</label>
+        <h6 class="dropdown-header text-center" style="font-weight:bold;">Aktualny email</h6>
+        <form id="emailForm">
           <div class="input-group ml-2 mb-2">
-              <input class="form-control" type="text" id="userEmail" value="{{user.email}}">
+              <input class="form-control" type="email" name="email" id="userEmail" value="{{user.email}}">
               <button class="btn btn-secondary mr-3" type="button" id="changeEmail">Zmień nazwę</button>
           </div>
         </form>
         <div class="dropdown-divider my-1 w-100"></div>
+        <h6 class="dropdown-header text-center" style="font-weight:bold;">Zmień hasło</h6>
         <form id="passwordForm">
           <div class="m-2">
             <input class="form-control" type="password" id="userPassowrd" name="password" placeholder="tu wpisz nowe hasło">
@@ -529,7 +548,7 @@ var openUser = 0;
         </div>
     </div>
   </div>
-  <div class="col-lg-4 marginY">
+  <div class="col-lg-4">
     <img class="mt-2" src="../img/settings.jpg" alt="balans2" style="width:88%;">
   </div>
 </div>
@@ -546,7 +565,7 @@ var openUser = 0;
         </button>
       </div>
       <div class="modal-body text-left">
-        <input type="text" id="nameOfNewCategoryIncome" placeholder="np. hipoteka">
+        <input type="text" id="nameOfNewCategoryIncome" class="form-control" placeholder="np. hipoteka">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
@@ -566,7 +585,7 @@ var openUser = 0;
         </button>
       </div>
       <div class="modal-body text-left">
-        <input type="text" id="nameOfNewCategoryPayment" placeholder="np. dary natury">
+        <input type="text" id="nameOfNewCategoryPayment" class="form-control" placeholder="np. dary natury">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
@@ -586,7 +605,14 @@ var openUser = 0;
         </button>
       </div>
       <div class="modal-body text-left">
-        <input type="text" id="nameOfNewCategoryExpense" placeholder="np. pluszowe misie">
+        <input type="text" id="nameOfNewCategoryExpense" class="form-control" placeholder="np. pluszowe misie">
+        <div class="form-check">
+          <label class="form-check-label" for="limit">
+            <input type="checkbox" id="limit" class="form-check-input limitCheckbox">
+            Ustaw limit
+          </label>
+        </div>
+        <input type="number" class="limitMoney form-control" id="addLimitValue" disabled>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
@@ -608,14 +634,14 @@ var openUser = 0;
       </div>
       <div class="modal-body text-left">
         <label for="nameOfEditCategoryExpense">Nazwa kategorii</label>
-        <input type="text" id="nameOfEditCategoryExpense" autofocus>
+        <input type="text" id="nameOfEditCategoryExpense" class="form-control" autofocus>
         <div class="form-check">
           <label class="form-check-label" for="limit">
             <input type="checkbox" id="limit" class="form-check-input limitCheckbox">
             Ustaw limit
           </label>
         </div>
-        <input type="number" class="limitMoney" id="limitValue" disabled>
+        <input type="number" class="limitMoney form-control" id="limitValue" disabled>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
@@ -636,7 +662,7 @@ var openUser = 0;
       </div>
       <div class="modal-body text-left">
         <label for="nameOfEditCategoryIncome">Nazwa kategorii</label>
-        <input type="text" id="nameOfEditCategoryIncome" autofocus>
+        <input type="text" id="nameOfEditCategoryIncome" class="form-control" autofocus>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
@@ -657,7 +683,7 @@ var openUser = 0;
       </div>
       <div class="modal-body text-left">
         <label for="nameOfEditCategoryPayment">Nazwa kategorii</label>
-        <input type="text" id="nameOfEditCategoryPayment" autofocus>
+        <input type="text" id="nameOfEditCategoryPayment" class="form-control" autofocus>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
