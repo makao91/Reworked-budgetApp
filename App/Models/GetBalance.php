@@ -12,6 +12,7 @@ class GetBalance extends \Core\Model
   public $incomeSaldo = 0;
   public $expenseName = [];
   public $expenseAmount = [];
+  public $expenseLimit = [];
   public $expenseSaldo = 0;
 
   public function __construct($data = [])
@@ -25,7 +26,7 @@ class GetBalance extends \Core\Model
   public function getIncomes()
   {
     $user = Auth::getUser();
-    $rawData = static::fetchFromDatabaseIncomes($user->id, $this->fromDate, $this->dateTo);    
+    $rawData = static::fetchFromDatabaseIncomes($user->id, $this->fromDate, $this->dateTo);
 
     $data = array();
     foreach ($rawData as $row) {
@@ -79,16 +80,23 @@ class GetBalance extends \Core\Model
       $expenseCategoryName = static::getCategoryNameExpense($categoryIdExpense);
       foreach ($expenseCategoryName as $row2) {
         $this->expenseName[] = $row2['name'];
+        $expLimit = $row2['paymentlimit'];
         $this->expenseAmount[] = $row["SUM(amount)"];
         $this->expenseSaldo += $row["SUM(amount)"];
+        if($expLimit && $expLimit >= $row["SUM(amount)"]){
+            $this->expenseLimit[] ='Limit: <span style="color:green;">'.$expLimit.' zł'.'</span>';
+        }else if($expLimit && $expLimit < $row["SUM(amount)"]){
+          $this->expenseLimit[] ='Limit: <span style="color:red;">!'.$expLimit.' zł'.'!</span>';
+        }else{
+          $this->expenseLimit[] = $expLimit;
+        }
       };
     };
   }
-
   static public function getCategoryNameExpense($categoryIdExpense)
   {
     $db = static::getDB();
-    $sql = "SELECT name FROM expenses_category_assigned_to_users WHERE id = :categoryIdExpense";
+    $sql = "SELECT name, paymentlimit FROM expenses_category_assigned_to_users WHERE id = :categoryIdExpense";
     $stmt = $db->prepare($sql);
 
     $stmt->bindValue(':categoryIdExpense', $categoryIdExpense, PDO::PARAM_STR);

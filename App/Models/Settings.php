@@ -32,7 +32,7 @@ class Settings extends \Core\Model
       $this->expenseName[] = $row['name'];
       $this->expenseLimit[] = $row['paymentlimit'];
         if($row['paymentlimit']){
-          $this->expenseNameWithLimit[] = $row['name'].' - - - - - '.' Limit: '. $row['paymentlimit'].' zł';
+          $this->expenseNameWithLimit[] = $row['name'].'<br>'.'Limit: '. $row['paymentlimit'].' zł';
         }else{
           $this->expenseNameWithLimit[] = $row['name'];
         }
@@ -218,12 +218,58 @@ class Settings extends \Core\Model
 
     $stmt->execute();
   }
+  public function editPassword($editData)
+  {
+    $newPassword = $editData['newPass'];
+    $password_hash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+    $user = Auth::getUser();
+    $db = static::getDB();
+    $sql = "UPDATE users SET password_hash = :password_hash WHERE id = :id";
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':id', $user->id, PDO::PARAM_INT);
+    $stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
+
+    $stmt->execute();
+  }
+  public function editName($editData)
+  {
+    $newName = $editData['newName'];
+
+    $user = Auth::getUser();
+    $db = static::getDB();
+    $sql = "UPDATE users SET name = :name WHERE id = :id";
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':id', $user->id, PDO::PARAM_INT);
+    $stmt->bindValue(':name', $newName, PDO::PARAM_STR);
+
+    $stmt->execute();
+  }
+  public function editEmail($editData)
+  {
+    $newEmail = $editData['newEmail'];
+
+    $user = Auth::getUser();
+    $db = static::getDB();
+    $sql = "UPDATE users SET email = :email WHERE id = :id";
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':id', $user->id, PDO::PARAM_INT);
+    $stmt->bindValue(':email', $newEmail, PDO::PARAM_STR);
+
+    $stmt->execute();
+  }
   public function editCatEx($editData)
   {
 
     $newCatName = $editData['catName'];
     $oldCatName = $editData['oldCatName'];
     $limitPay = $editData['limit'];
+    if($limitPay == 0){
+      $limitPay = null;
+    }
 
     $user = Auth::getUser();
     $db = static::getDB();
@@ -235,7 +281,7 @@ class Settings extends \Core\Model
       $stmt->bindValue(':limitPay', $limitPay, PDO::PARAM_INT);
       $stmt->bindValue(':newName', $newCatName, PDO::PARAM_STR);
       $stmt->bindValue(':oldName', $oldCatName, PDO::PARAM_STR);
-      
+
     $stmt->execute();
   }
 }

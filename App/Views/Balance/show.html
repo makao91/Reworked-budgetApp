@@ -112,44 +112,57 @@ window.onload = function(){
             <h5>Przychody razem: {{balance.incomeSaldo}} zł</h5>
             <h2>SALDO</h2>
             <h2 id="saldo">{{balance.incomeSaldo - balance.expenseSaldo}} zł</h2>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <div classs="row">
-                <h3>Przychody szczegółowo:</h3>
-                <div class="col-sm-6 float-left">
-                  {% for incomeName in balance.incomeName %}
-                    <div>{{incomeName}}</div>
-                  {% endfor %}
-                </div>
-                <div class="col-sm-6 float-left">
-                  {% for incomeAmount in balance.incomeAmount %}
-                      <div>{{incomeAmount}} zł</div>
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-            <div class="col-6">
-              <div classs="row">
-                <h3>Wydatki szczegółowo</h3>
-                <div class="col-sm-6 float-left">
-                  {% for expenseName in balance.expenseName %}
-                    <div>{{expenseName}}</div>
-                  {% endfor %}
-                </div>
-                <div class="col-sm-6 float-left">
-                  {% for expenseAmount in balance.expenseAmount %}
-                      <div>{{expenseAmount}} zł</div>
-                  {% endfor %}
-                </div>
-              </div>
-              {% endif %}
-
+            {% if balance.incomeSaldo - balance.expenseSaldo < 0 %}
+            <p style="color: red;">Coś nie pykło. Ogranicz wydatki lub zwiększ przychody!</p>
+            {% else %}
+              <p style="color: green;">Good job! Zarządzasz nienajgorzej, a przynajmnniej jako tako.</p>
+            {% endif %}
             </div>
           </div>
         </div>
       </div>
+
+        <div class="row mt-3">
+          <div class="col-5">
+            <div classs="row">
+              <h3>Przychody szczegółowo:</h3>
+              <div class="col-sm-8 float-left text-left">
+                {% for incomeName in balance.incomeName %}
+                  <div>{{incomeName}}</div>
+                {% endfor %}
+              </div>
+              <div class="col-sm-4 float-left text-left">
+                {% for incomeAmount in balance.incomeAmount %}
+                    <div>{{incomeAmount}} zł</div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="col-7">
+            <div classs="row">
+              <h3>Wydatki szczegółowo:</h3>
+              <div class="col-sm-4 float-left text-left">
+                {% for expenseName in balance.expenseName %}
+                  <div>{{expenseName}}</div>
+                {% endfor %}
+              </div>
+              <div class="col-sm-4 float-left text-left">
+                {% for expenseLimit in balance.expenseLimit %}
+                {% set dataWithHtml = expenseLimit %}
+                  <div>{{dataWithHtml|raw}}</div>
+                {% endfor %}
+              </div>
+              <div class="col-sm-4 float-left text-left">
+                {% for expenseAmount in balance.expenseAmount %}
+                    <div>{{expenseAmount}} zł</div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
+          </div>
+        </div>
+
       {% if balance is not empty %}
       <div class="row justify-content-start">
         <div class="col-xl-6">
