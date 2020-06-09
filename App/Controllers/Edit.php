@@ -61,7 +61,7 @@ class Edit extends Authenticated
     public function addCategoryExpense()
     {
       $this->data = new Settings();
-      $this->data->addCatEx($_POST['catName']);
+      $this->data->addCatEx($_POST);
     }
 
     public function editCategoryIncome()

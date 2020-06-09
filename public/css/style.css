@@ -272,11 +272,16 @@ textarea {
 {
 	background-color:#f35858;
 }
-.showModalEditExpense
+.showModalEditExpense, .showModalEditIncome, .showModalEditPayment
 {
 		cursor: pointer;
 }
 .dropdown-divider
 {
  	border-top: 1px solid #635b5b;
+}
+.limit
+{
+	color:#5f0bd6;
+	margin-left: 20px;
 }
