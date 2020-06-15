@@ -414,7 +414,7 @@ var openUser = 0;
 
 <main>
   <nav>
-    <a href="/menu/index"><button type="button" class="btn btn-lg btn-warning btn-warning-inverse sticky">Powrót do menu głównego</button></a>
+    <a href="/menu/index"><button type="button" class="btn btn-lg btn-warning btn-warning-inverse sticky" style="z-index: 9999;">Powrót do menu głównego</button></a>
   </nav>
 <header>
   <div class="row mt-1">
@@ -636,7 +636,8 @@ var openUser = 0;
         <label for="nameOfEditCategoryExpense">Nazwa kategorii</label>
         <input type="text" id="nameOfEditCategoryExpense" class="form-control" autofocus>
         <div class="form-check">
-          <label class="form-check-label" for="limit">
+          <label class="form-check-label">
+
             <input type="checkbox" id="limit" class="form-check-input limitCheckbox">
             Ustaw limit
           </label>

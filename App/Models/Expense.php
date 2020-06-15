@@ -33,7 +33,13 @@ class Expense extends \Core\Model
 
     $data = array();
     foreach ($fetchData as $row) {
-      $data[] = array('id'=>$row['id'], 'text'=>$row['name']);
+      if(empty($row['paymentlimit']))
+      {
+        $data[] = array('id'=>$row['id'], 'text'=>$row['name']);
+      }else {
+        $data[] = array('id'=>$row['id'], 'text'=>$row['name']." =====> Limit:".$row['paymentlimit']." zł");
+      }
+
     };
     echo json_encode($data);
   }

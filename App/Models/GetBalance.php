@@ -87,8 +87,8 @@ class GetBalance extends \Core\Model
             $this->expenseLimit[] ='Limit: <span style="color:green;">'.$expLimit.' zł'.'</span>';
         }else if($expLimit && $expLimit < $row["SUM(amount)"]){
           $this->expenseLimit[] ='Limit: <span style="color:red;">!'.$expLimit.' zł'.'!</span>';
-        }else{
-          $this->expenseLimit[] = $expLimit;
+        }else if ($expLimit == null){
+          $this->expenseLimit[] = '-';
         }
       };
     };
