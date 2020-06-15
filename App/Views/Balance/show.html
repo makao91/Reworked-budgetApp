@@ -123,36 +123,36 @@ window.onload = function(){
       </div>
 
         <div class="row mt-3">
-          <div class="col-5">
+          <div class="col-lg-5">
             <div classs="row">
               <h3>Przychody szczegółowo:</h3>
-              <div class="col-sm-8 float-left text-left">
+              <div class="col-8 float-left text-left">
                 {% for incomeName in balance.incomeName %}
                   <div>{{incomeName}}</div>
                 {% endfor %}
               </div>
-              <div class="col-sm-4 float-left text-left">
+              <div class="col-4 float-left text-left">
                 {% for incomeAmount in balance.incomeAmount %}
                     <div>{{incomeAmount}} zł</div>
                 {% endfor %}
               </div>
             </div>
           </div>
-          <div class="col-7">
+          <div class="col-lg-7">
             <div classs="row">
               <h3>Wydatki szczegółowo:</h3>
-              <div class="col-sm-4 float-left text-left">
+              <div class="col-4 float-left text-left">
                 {% for expenseName in balance.expenseName %}
                   <div>{{expenseName}}</div>
                 {% endfor %}
               </div>
-              <div class="col-sm-4 float-left text-left">
+              <div class="col-4 float-left text-left">
                 {% for expenseLimit in balance.expenseLimit %}
                 {% set dataWithHtml = expenseLimit %}
                   <div>{{dataWithHtml|raw}}</div>
                 {% endfor %}
               </div>
-              <div class="col-sm-4 float-left text-left">
+              <div class="col-4 float-left text-left">
                 {% for expenseAmount in balance.expenseAmount %}
                     <div>{{expenseAmount}} zł</div>
                 {% endfor %}
