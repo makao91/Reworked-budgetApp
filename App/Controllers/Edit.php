@@ -37,16 +37,22 @@ class Edit extends Authenticated
       $this->data = new Settings();
       $this->data->deleteCatIn($_POST['catName']);
     }
+
+    
     public function deleteCategoryPayment()
     {
       $this->data = new Settings();
       $this->data->deleteCatPay($_POST['catName']);
     }
+
+
     public function deleteCategoryExpense()
     {
       $this->data = new Settings();
       $this->data->deleteCatEx($_POST['catName']);
     }
+
+
 
     public function addCategoryIncome()
     {

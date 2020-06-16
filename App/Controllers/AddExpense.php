@@ -38,34 +38,22 @@ class Addexpense extends Authenticated
 
     if($expense->save())
     {
-      Flash::addMessage('Wydatek dodano pomyślnie');
-      $this->showAction();
+      echo true;
     }
     else{
-      View::renderTemplate('AddExpense/show.html', ['expense' =>$expense]);
+      echo false;
     }
   }
+
+
+  public function validLimitAction ()
+  {
+    $ooo = false;
+    header('Content-Type: application/json');
+
+    echo json_encode($ooo);
+
+  }
+
+
 }
-
-  /*  public function editAction()
-    {
-      View::renderTemplate('Profile/edit.html',[
-        'user' => $this->user
-      ]);
-
-    }
-
-    public function updateAction()
-    {
-
-      if($this->user->updateProfile($_POST))
-      {
-        Flash::addMessage('Changes saved');
-        $this->redirect('/profile/show');
-      } else {
-        View::renderTemplate('Profile/edit.html', [
-          'user' => $this->user
-        ]);
-      }
-    }
-    */

@@ -33,7 +33,7 @@ class Settings extends \Core\Model
     foreach ($rawData as $row) {
       $this->expenseName[] = $row['name'];
       $this->expenseLimit[] = $row['paymentlimit'];
-        if($row['paymentlimit']){
+        if($row['paymentlimit'] != "-"){
           $this->expenseNameWithLimit[] = $row['name'].'<span class="limit"> Limit: '. $row['paymentlimit'].' zł</span>';
         }else{
           $this->expenseNameWithLimit[] = $row['name'];
@@ -73,6 +73,32 @@ class Settings extends \Core\Model
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+  static public function getCategoryIdExpense($name)
+  {
+    $user = Auth::getUser();
+    $db = static::getDB();
+    $sql = "SELECT id FROM expenses_category_assigned_to_users WHERE user_id = :user_id AND name = :name";
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':user_id', $user->id, PDO::PARAM_INT);
+    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+  static public function getCategoryIdIncome($name)
+  {
+    $user = Auth::getUser();
+    $db = static::getDB();
+    $sql = "SELECT id FROM incomes_category_assigned_to_users WHERE user_id = :user_id AND name = :name";
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':user_id', $user->id, PDO::PARAM_INT);
+    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
+
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
   static public function getPaymentMethodsNames($id)
   {
     $db = static::getDB();
@@ -89,6 +115,9 @@ class Settings extends \Core\Model
   public function deleteCatIn($categoryName)
   {
     $user = Auth::getUser();
+    static::updateIncomes($categoryName);
+
+
     $db = static::getDB();
     $sql = "DELETE FROM incomes_category_assigned_to_users WHERE name = :name AND user_id = :user_id ";
     $stmt = $db->prepare($sql);
@@ -110,9 +139,16 @@ class Settings extends \Core\Model
 
     $stmt->execute();
   }
+
+
+
+
   public function deleteCatEx($categoryName)
   {
     $user = Auth::getUser();
+    static::updateExpenses($categoryName);
+
+
     $db = static::getDB();
     $sql = "DELETE FROM expenses_category_assigned_to_users WHERE name = :name AND user_id = :user_id ";
     $stmt = $db->prepare($sql);
@@ -122,6 +158,46 @@ class Settings extends \Core\Model
 
     $stmt->execute();
   }
+public static function updateExpenses($categoryName)
+{
+  $rawData = static::getCategoryIdExpense($categoryName);
+  $rawData2 = static::getCategoryIdExpense("Inne");
+  foreach ($rawData as $row) {
+      $categoryId = $row['id'];
+  };
+  foreach ($rawData2 as $row) {
+      $categoryInneId = $row['id'];
+  };
+  $db = static::getDB();
+  $sql = "UPDATE expenses SET expense_category_assigned_to_user_id = :catInne WHERE expense_category_assigned_to_user_id = :catName";
+  $stmt = $db->prepare($sql);
+
+  $stmt->bindValue(':catInne', $categoryInneId, PDO::PARAM_STR);
+  $stmt->bindValue(':catName', $categoryId, PDO::PARAM_STR);
+
+  $stmt->execute();
+}
+public static function updateIncomes($categoryName)
+{
+  $rawData = static::getCategoryIdIncome($categoryName);
+  $rawData2 = static::getCategoryIdIncome("Inne");
+  foreach ($rawData as $row) {
+      $categoryId = $row['id'];
+  };
+  foreach ($rawData2 as $row) {
+      $categoryInneId = $row['id'];
+  };
+  $db = static::getDB();
+  $sql = "UPDATE incomes SET income_category_assigned_to_user_id = :catInne WHERE income_category_assigned_to_user_id = :catName";
+  $stmt = $db->prepare($sql);
+
+  $stmt->bindValue(':catInne', $categoryInneId, PDO::PARAM_STR);
+  $stmt->bindValue(':catName', $categoryId, PDO::PARAM_STR);
+
+  $stmt->execute();
+}
+
+
 
 
   public function addCatIn($categoryName)
