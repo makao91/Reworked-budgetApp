@@ -7,4 +7,8 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-l
-RewriteRule ^(.*)$ index.php?$1 [L,QSA]
+RewriteRule ^(.*)$ index.php?$1 [QSA]
+
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://budget.marcinkapela.pl%{REQUEST_URI} [L,NE,R=301]

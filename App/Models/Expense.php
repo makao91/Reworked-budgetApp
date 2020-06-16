@@ -95,8 +95,8 @@ class Expense extends \Core\Model
         $stmt->bindValue(':amount', $this->expenseAmount, PDO::PARAM_INT);
         $stmt->bindValue(':date_of_expense', $this->expenseDate, PDO::PARAM_STR);
         $stmt->bindValue(':expense_comment', $this->expenseComment, PDO::PARAM_STR);
-
-        return $stmt->execute();
+        $stmt->execute();
+        return true;
     }
     return false;
   }

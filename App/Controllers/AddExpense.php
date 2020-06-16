@@ -44,16 +44,4 @@ class Addexpense extends Authenticated
       echo false;
     }
   }
-
-
-  public function validLimitAction ()
-  {
-    $ooo = false;
-    header('Content-Type: application/json');
-
-    echo json_encode($ooo);
-
-  }
-
-
 }

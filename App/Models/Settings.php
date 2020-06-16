@@ -77,11 +77,10 @@ class Settings extends \Core\Model
   {
     $user = Auth::getUser();
     $db = static::getDB();
-    $sql = "SELECT id FROM expenses_category_assigned_to_users WHERE user_id = :user_id AND name = :name";
+    $sql = "SELECT id FROM expenses_category_assigned_to_users WHERE user_id = :user_id AND name LIKE '%".$name."%'";
     $stmt = $db->prepare($sql);
 
     $stmt->bindValue(':user_id', $user->id, PDO::PARAM_INT);
-    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
 
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -150,16 +149,17 @@ class Settings extends \Core\Model
 
 
     $db = static::getDB();
-    $sql = "DELETE FROM expenses_category_assigned_to_users WHERE name = :name AND user_id = :user_id ";
+    $sql = "DELETE FROM expenses_category_assigned_to_users WHERE name LIKE '%".$categoryName."%' AND user_id = :user_id ";
     $stmt = $db->prepare($sql);
 
     $stmt->bindValue(':user_id', $user->id, PDO::PARAM_INT);
-    $stmt->bindValue(':name', $categoryName, PDO::PARAM_STR);
 
     $stmt->execute();
   }
 public static function updateExpenses($categoryName)
 {
+  $categoryId = "";
+  $categoryInneId = "";
   $rawData = static::getCategoryIdExpense($categoryName);
   $rawData2 = static::getCategoryIdExpense("Inne");
   foreach ($rawData as $row) {
