@@ -33,7 +33,7 @@ class Expense extends \Core\Model
 
     $data = array();
     foreach ($fetchData as $row) {
-      if(empty($row['paymentlimit']))
+      if($row['paymentlimit'] == "-")
       {
         $data[] = array('id'=>$row['id'], 'text'=>$row['name']);
       }else {
@@ -101,7 +101,6 @@ class Expense extends \Core\Model
     return false;
   }
 
-
   public function validation()
   {
     if($this->paymentMethod == 1){
@@ -117,4 +116,65 @@ class Expense extends \Core\Model
       $this->errors[] = 'Kategoria jest wymagana.';
     }
   }
+
+  public function checkLimit()
+  {
+
+    $fromDate = date("Y-m-01");
+    $dateTo = date("Y-m-t");
+
+    $user = Auth::getUser();
+    $getCategoryAmount = static::fetchFromDatabaseExpensesFromSingleCategory($user->id, $fromDate, $dateTo, $_POST['expenseCategory']);
+    $getCategoryLimit = static::fetchCategoryLimit($_POST['expenseCategory']);
+
+      foreach ($getCategoryAmount as $row2) {
+      $sumAmount = $row2['SUM(amount)'];
+      };
+      foreach ($getCategoryLimit as $row) {
+      $limit = $row['paymentlimit'];
+      };
+
+      if($limit != "-")
+      {
+          if ($sumAmount > $limit)
+            {
+              return true;
+            }
+      }else {
+          return false;
+        }
+
+}
+
+  static public function fetchFromDatabaseExpensesFromSingleCategory($userId, $dateFrom, $dateTo, $categoryId)
+  {
+    $db = static::getDB();
+
+    $sql = 'SELECT SUM(amount) FROM expenses WHERE user_id = :userId AND date_of_expense >= :dateFrom AND date_of_expense <= :dateTo AND expense_category_assigned_to_user_id = :expenseCategory';
+
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+    $stmt->bindValue(':expenseCategory', $categoryId, PDO::PARAM_INT);
+    $stmt->bindValue(':dateFrom', $dateFrom, PDO::PARAM_STR);
+    $stmt->bindValue(':dateTo', $dateTo, PDO::PARAM_STR);
+
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+  static public function fetchCategoryLimit($categoryId)
+  {
+    $db = static::getDB();
+
+    $sql = 'SELECT paymentlimit FROM expenses_category_assigned_to_users WHERE id = :categoryId';
+
+    $stmt = $db->prepare($sql);
+
+    $stmt->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+
 }

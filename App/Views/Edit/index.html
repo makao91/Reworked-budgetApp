@@ -229,6 +229,7 @@ var openUser = 0;
                           method: "POST",
                           data: {catName:catName},
                           success: function() {
+                            alert("Uwaga! Jeżeli miałeś jakieś wydatki związane z tą categorią, zostaną przepisane one do kategorii 'Inne'.")
                           window.location.reload();
                           }
                      });

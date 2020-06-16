@@ -12,9 +12,7 @@ class Balance extends Authenticated
   private $data;
 
   public function showAction()
-   {
-     $fromDate = date("Y-m-01");
-     $dateTo = date("Y-m-t");
+   {  
       View::renderTemplate('Balance/show.html', [
         'firstDay' => $firstDay,
         'lastDay' => $lastDay
@@ -27,7 +25,7 @@ class Balance extends Authenticated
    {
      $this->data = new GetBalance($_POST);
      $this->data->getIncomes();
-     $this->data->getExpenses();     
+     $this->data->getExpenses();
      View::renderTemplate('Balance/show.html', [
        'balance' => $this->data
      ]);

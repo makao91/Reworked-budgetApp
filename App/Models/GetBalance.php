@@ -83,6 +83,9 @@ class GetBalance extends \Core\Model
         $expLimit = $row2['paymentlimit'];
         $this->expenseAmount[] = $row["SUM(amount)"];
         $this->expenseSaldo += $row["SUM(amount)"];
+        if($expLimit == "-"){
+          $expLimit = null;
+        }
         if($expLimit && $expLimit >= $row["SUM(amount)"]){
             $this->expenseLimit[] ='Limit: <span style="color:green;">'.$expLimit.' zł'.'</span>';
         }else if($expLimit && $expLimit < $row["SUM(amount)"]){
@@ -93,6 +96,9 @@ class GetBalance extends \Core\Model
       };
     };
   }
+
+
+
   static public function getCategoryNameExpense($categoryIdExpense)
   {
     $db = static::getDB();
@@ -120,4 +126,5 @@ class GetBalance extends \Core\Model
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+
 }
