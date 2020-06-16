@@ -86,13 +86,9 @@ $(document).ready(function(){
                          url: "/addexpense/create",
                          method: "POST",
                          data: {expenseAmount:expenseAmount,expenseDate:expenseDate,paymentMethod:paymentMethod,expenseCategory:expenseCategory,expenseComment:expenseComment},
-                         success: function(data) {
-                             if(data == true){
+                         success: function() {
                                alert("Wydatek dodano pomyslnie");
                               window.location.reload();
-                             } else {
-                               alert("Coś poszło nie tak...");
-                             }
                          }
                     });
                   }
@@ -101,13 +97,9 @@ $(document).ready(function(){
                        url: "/addexpense/create",
                        method: "POST",
                        data: {expenseAmount:expenseAmount,expenseDate:expenseDate,paymentMethod:paymentMethod,expenseCategory:expenseCategory,expenseComment:expenseComment},
-                       success: function(data) {
-                           if(data == true){
+                       success: function() {
                              alert("Wydatek dodano pomyslnie");
                             window.location.reload();
-                           } else {
-                             alert("Coś poszło nie tak...");
-                           }
                        }
                   });
                }

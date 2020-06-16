@@ -16,7 +16,7 @@ class Limit extends \Core\Controller
       $expense = new Expense($_POST);
 
       $is_exceeded = $expense->checkLimit();
-      header('Content-Type: application/json');
-      echo json_encode($is_exceeded);
+
+      echo $is_exceeded;
     }
 }
